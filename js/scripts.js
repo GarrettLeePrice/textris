@@ -86,7 +86,7 @@ Board.prototype.isRightClear = function() {
     // console.log(column);
     if (column > 9) {
       return false;
-    } else if (this.rows[row][column] !== "O") {
+    } else if (!row < 0 && this.rows[row][column] !== "O") {
       return false;
     }
   }
@@ -107,7 +107,7 @@ Board.prototype.isLeftClear = function() {
     var column = this.currentPiece.location[1] + this.currentPiece.left[i][1] - 1;
     if (column < 0) {
       return false;
-    } else if (this.rows[row][column] !== "O") {
+    } else if (!row < 0 && this.rows[row][column] !== "O") {
       return false;
     }
   }
@@ -118,7 +118,9 @@ Board.prototype.clearCurrentPieceLocation = function() {
   for (i = 0; i < this.currentPiece.occupies.length; i++) {
     var row = this.currentPiece.location[0] + this.currentPiece.occupies[i][0];
     var column = this.currentPiece.location[1] + this.currentPiece.occupies[i][1];
-    this.rows[row][column] = "O";
+    if (row >= 0) {
+      this.rows[row][column] = "O";
+    }
   }
 }
 
@@ -126,7 +128,9 @@ Board.prototype.populateCurrentPiece = function() {
   for (i = 0; i < this.currentPiece.occupies.length; i++) {
     var row = this.currentPiece.location[0] + this.currentPiece.occupies[i][0];
     var column = this.currentPiece.location[1] + this.currentPiece.occupies[i][1];
-    this.rows[row][column] = "H";
+    if (row >= 0) {
+      this.rows[row][column] = "&#9632;";
+    }
   }
   this.displayBoard();
 };
@@ -149,31 +153,30 @@ Board.prototype.rotatePiece = function() {
 
 Board.prototype.getNewPiece = function() {
   var newPiece = new Pieces();
-  newPiece.setToLine();
-  // var rando = Math.ceil(Math.random() * 7);
-  // switch (rando) {
-  //   case 1:
-  //     newPiece.setToT();
-  //     break;
-  //   case 2:
-  //     newPiece.setToSquare();
-  //     break;
-  //   case 3:
-  //     newPiece.setToL();
-  //     break;
-  //   case 4:
-  //     newPiece.setToReverseL();
-  //     break;
-  //   case 5:
-  //     newPiece.setToZ();
-  //     break;
-  //   case 6:
-  //     newPiece.setToReverseZ();
-  //     break;
-  //   case 7:
-  //     newPiece.setToLine();
-  //     break;
-  // }
+  var rando = Math.ceil(Math.random() * 7);
+  switch (rando) {
+    case 1:
+      newPiece.setToT();
+      break;
+    case 2:
+      newPiece.setToSquare();
+      break;
+    case 3:
+      newPiece.setToL();
+      break;
+    case 4:
+      newPiece.setToReverseL();
+      break;
+    case 5:
+      newPiece.setToZ();
+      break;
+    case 6:
+      newPiece.setToReverseZ();
+      break;
+    case 7:
+      newPiece.setToLine();
+      break;
+  }
   return newPiece;
 };
 
@@ -189,9 +192,7 @@ Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj
       return false;
     } else if (row > 19) {
       return false;
-    } else if (row < 0) {
-      return false;
-    } else if (parentObj.rows[row][column] !== "O") {
+    } else if (! row < 0 && parentObj.rows[row][column] !== "O") {
       return false;
     }
   }
@@ -200,7 +201,7 @@ Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj
 
 // Pieces object starts here
 function Pieces() {
-  this.location = [4, 4];
+  this.location = [-1, 4];
   this.occupies = [];
   this.left = [];
   this.right = [];
@@ -293,6 +294,8 @@ Pieces.prototype.rotatePiece = function(parentObj) {
   /* rotates the pieces clockwise based on their current location in the basic 9-box grid */
   if (this.pieceType === "line") {
     this.rotateLine(parentObj);
+    return;
+  } else if (this.pieceType === "square") {
     return;
   }
   var newSpacesOccupied = [];
@@ -405,13 +408,11 @@ Pieces.prototype.setToLine = function() {
   this.setBounds();
 };
 
-
+// front end logic starts here
 var board = new Board();
 
-// front end logic starts here
-
-
 $(document).ready(function() {
+  board.displayBoard();
   var counter = 500;
   var runGame = function() {
     clearInterval(interval);

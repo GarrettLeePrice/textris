@@ -129,12 +129,44 @@ Pieces.prototype.setToT = function() {
   this.pieceType = "t";
   this.spacesOccupied.push(1, 2, 3, 5);
   this.setOccupies();
-
+  this.setBounds();
 };
 
 Pieces.prototype.setBounds = function() {
+  this.setRight();
   /* will set this.left, right, and bottom to be checked elsewhere */
+
 }
+
+Pieces.prototype.setLeft = function() {
+  /* Sets the coordinates for the left-most spaces occupied. Searches spaces 1-3 until it finds something, then 4-6, then 7-9 */
+  for (i = 1; i < 10;) {
+    var j = i + 3;
+    for (; i < j; i++) {
+      console.log(i);
+      if (this.spacesOccupied.includes(i)) {
+        this.left.push(this.possibleSpaces[i-1]);
+        i = j;
+        break;
+      }
+    }
+  }
+};
+
+Pieces.prototype.setRight = function() {
+  /* Sets the coordinates for the right-most spaces occupied. Searches spaces 9, 8, 7, until it finds something, then 6, 5, 4, then 3, 2, 1*/
+  for (i = 9; i > 0;) {
+    var j = i - 3;
+    for (; i > j; i--) {
+      console.log(i);
+      if (this.spacesOccupied.includes(i)) {
+        this.left.push(this.possibleSpaces[i-1]);
+        i = j;
+        break;
+      }
+    }
+  }
+};
 
 Pieces.prototype.setOccupies = function() {
   /* takes this.spacesOccupied and converts it to an array of the proper relative coordinates */

@@ -20,6 +20,9 @@ Board.prototype.lowerCurrentPiece = function() {
     this.clearCurrentPieceLocation();
     this.currentPiece.location[0]++;
     this.populateCurrentPiece();
+  } else {
+    this.currentPiece = this.getNewPiece();
+    this.populateCurrentPiece();
   }
 };
 
@@ -29,6 +32,8 @@ Board.prototype.isBottomClear = function() {
     var column = this.currentPiece.location[1] + this.currentPiece.bottom[i][1];
     // console.log(row);
     if (row > 19) {
+      return false;
+    } else if (this.rows[row][column] !== "O") {
       return false;
     }
   }
@@ -50,6 +55,8 @@ Board.prototype.isRightClear = function() {
     console.log(column);
     if (column > 9) {
       return false;
+    } else if (this.rows[row][column] !== "O") {
+      return false;
     }
   }
   return true;
@@ -68,6 +75,8 @@ Board.prototype.isLeftClear = function() {
     var row = this.currentPiece.location[0] + this.currentPiece.left[i][0];
     var column = this.currentPiece.location[1] + this.currentPiece.left[i][1] - 1;
     if (column < 0) {
+      return false;
+    } else if (this.rows[row][column] !== "O") {
       return false;
     }
   }
@@ -103,18 +112,26 @@ Board.prototype.displayBoard = function() {
 
 Board.prototype.rotatePiece = function() {
   this.clearCurrentPieceLocation();
-  this.currentPiece.rotatePiece();
+  this.currentPiece.rotatePiece(this);
   this.populateCurrentPiece();
 };
 
 Board.prototype.getNewPiece = function() {
   var newPiece = new Pieces();
-  newPiece.setToT();
+  var rando = Math.ceil(Math.random() * 2);
+  switch (rando) {
+    case 1:
+      newPiece.setToT();
+      break;
+    case 2:
+      newPiece.setToSquare();
+      break;
+  }
   return newPiece;
 };
 
-Board.prototype.confirmClear = function(location, relativeCoordinates) {
-
+Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj) {
+  /* checks to see if the given coordinates are clear. Currently only works with the edges, not with other blocks */
   for (i = 0; i < relativeCoordinates.length; i++) {
     var row = location[0] + relativeCoordinates[i][0];
     var column = location[1] + relativeCoordinates[i][1];
@@ -126,6 +143,8 @@ Board.prototype.confirmClear = function(location, relativeCoordinates) {
     } else if (row > 19) {
       return false;
     } else if (row < 0) {
+      return false;
+    } else if (parentObj.rows[row][column] !== "O") {
       return false;
     }
   }
@@ -142,13 +161,6 @@ var Pieces = function() {
   this.pieceType;
   this.possibleSpaces = [[1,-1], [1,0], [1,1], [0,-1], [0,0], [0,1], [-1,-1], [-1,0], [-1,1]];
   this.spacesOccupied = [];
-};
-
-Pieces.prototype.setToT = function() {
-  this.pieceType = "t";
-  this.spacesOccupied.push(1, 2, 3, 5);
-  this.setOccupies();
-  this.setBounds();
 };
 
 Pieces.prototype.setBounds = function() {
@@ -201,7 +213,7 @@ Pieces.prototype.setBottom = function() {
     } else if (this.spacesOccupied.includes(i + 6)) {
       this.bottom.push(this.possibleSpaces[i + 5]);
     }
-    console.log(this.bottom);
+    // console.log(this.bottom);
   }
 
 };
@@ -214,7 +226,7 @@ Pieces.prototype.setOccupies = function() {
   }
 };
 
-Pieces.prototype.rotatePiece = function() {
+Pieces.prototype.rotatePiece = function(parentObj) {
   /* rotates the pieces clockwise based on their current location in the basic 9-box grid */
   var newSpacesOccupied = [];
   for (i = 0; i < this.spacesOccupied.length; i++) {
@@ -252,28 +264,58 @@ Pieces.prototype.rotatePiece = function() {
   for (i = 0; i < newSpacesOccupied.length; i++) {
     testSpaces.push(this.possibleSpaces[newSpacesOccupied[i] - 1]);
   }
-  if (Board.prototype.confirmClear(this.location, testSpaces)) {
+  if (Board.prototype.confirmClear(this.location, testSpaces, parentObj)) {
     this.spacesOccupied = newSpacesOccupied;
     this.setOccupies();
     this.setBounds();
   }
 }
 
+Pieces.prototype.setToT = function() {
+  this.pieceType = "t";
+  this.spacesOccupied.push(1, 2, 3, 5);
+  this.setOccupies();
+  this.setBounds();
+};
+
 Pieces.prototype.setToSquare = function() {
   this.pieceType = "square";
-  this.occupies = [[0,0], [0,1], [1,0], [1,1]];
-  this.left = [[0,0],[1,0]];
-  this.right = [[0,1],[1,1]];
-  this.bottom = [[1,0],[1,1]];
+  this.spacesOccupied.push(1, 2, 4, 5);
+  this.setOccupies();
+  this.setBounds();
+};
+
+Pieces.prototype.setToZ = function() {
+  this.pieceType = "z";
+  this.spacesOccupied.push(2, 3, 4, 5);
+  this.setOccupies();
+  this.setBounds();
+};
+
+Pieces.prototype.setToReverseZ = function() {
+  this.pieceType="reverseZ";
+  this.spacesOccupied.push(1, 2, 5, 6);
+  this.setOccupies();
+  this.setBounds();
+};
+
+Pieces.prototype.setToL = function() {
+  this.pieceType="l";
+  this.spacesOccupied.push(1, 2, 3, 6);
+  this.setOccupies();
+  this.setBounds();
+};
+
+Pieces.prototype.setToReverseL = function() {
+  this.pieceType = "reverseL";
+  this.spacesOccupied.push(1, 2, 3, 4);
+  this.setOccupies();
+  this.setBounds();
 };
 
 Pieces.prototype.setToLine = function() {
   this.pieceType = "line";
-  this.occupies = [[0,0], [1,0], [2,0], [3,0]];
-  this.left = [[0,0], [1,0], [2,0], [3,0]];
-  this.right = [[0,0], [1,0], [2,0], [3,0]];
-  this.bottom = [[3,0]];
-}
+};
 
 var board = new Board();
 

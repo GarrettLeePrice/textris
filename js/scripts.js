@@ -1,8 +1,9 @@
-var Board = function() {
+function Board() {
   this.rows = [];
   this.currentPiece = this.getNewPiece();
   this.blocks = [];
   this.buildBoard();
+  this.lines = 0;
 };
 
 Board.prototype.buildBoard = function() {
@@ -23,6 +24,8 @@ Board.prototype.removeRow = function(row) {
   }
   this.rows.unshift(newRow);
   this.displayBoard();
+  this.lines++;
+  console.log(this.lines);
 };
 
 Board.prototype.findFullRows = function() {
@@ -65,7 +68,7 @@ Board.prototype.isBottomClear = function() {
     }
   }
   return true;
-}
+};
 
 Board.prototype.rightCurrentPiece = function() {
   if (this.isRightClear()) {
@@ -76,10 +79,11 @@ Board.prototype.rightCurrentPiece = function() {
 };
 
 Board.prototype.isRightClear = function() {
+  console.log(this.right);
   for (i = 0; i < this.currentPiece.right.length; i++) {
     var row = this.currentPiece.location[0] + this.currentPiece.right[i][0];
     var column = this.currentPiece.location[1] + this.currentPiece.right[i][1] + 1;
-    console.log(column);
+    // console.log(column);
     if (column > 9) {
       return false;
     } else if (this.rows[row][column] !== "O") {
@@ -131,7 +135,7 @@ Board.prototype.displayBoard = function() {
   $("body").text("");
   this.rows.forEach(function(row) {
     row.forEach(function(cell) {
-      $("body").append(cell);
+      $("body").append(cell + " ");
     })
     $("body").append("<br>");
   })
@@ -145,27 +149,31 @@ Board.prototype.rotatePiece = function() {
 
 Board.prototype.getNewPiece = function() {
   var newPiece = new Pieces();
-  var rando = Math.ceil(Math.random() * 6);
-  switch (rando) {
-    case 1:
-      newPiece.setToT();
-      break;
-    case 2:
-      newPiece.setToSquare();
-      break;
-    case 3:
-      newPiece.setToL();
-      break;
-    case 4:
-      newPiece.setToReverseL();
-      break;
-    case 5:
-      newPiece.setToZ();
-      break;
-    case 6:
-      newPiece.setToReverseZ();
-      break;
-  }
+  newPiece.setToLine();
+  // var rando = Math.ceil(Math.random() * 7);
+  // switch (rando) {
+  //   case 1:
+  //     newPiece.setToT();
+  //     break;
+  //   case 2:
+  //     newPiece.setToSquare();
+  //     break;
+  //   case 3:
+  //     newPiece.setToL();
+  //     break;
+  //   case 4:
+  //     newPiece.setToReverseL();
+  //     break;
+  //   case 5:
+  //     newPiece.setToZ();
+  //     break;
+  //   case 6:
+  //     newPiece.setToReverseZ();
+  //     break;
+  //   case 7:
+  //     newPiece.setToLine();
+  //     break;
+  // }
   return newPiece;
 };
 
@@ -191,14 +199,14 @@ Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj
 };
 
 // Pieces object starts here
-var Pieces = function() {
+function Pieces() {
   this.location = [4, 4];
   this.occupies = [];
   this.left = [];
   this.right = [];
   this.bottom = [];
   this.pieceType;
-  this.possibleSpaces = [[1,-1], [1,0], [1,1], [0,-1], [0,0], [0,1], [-1,-1], [-1,0], [-1,1]];
+  this.possibleSpaces = [[1,-1], [1,0], [1,1], [0,-1], [0,0], [0,1], [-1,-1], [-1,0], [-1,1], [1,2], [-2,0]];
   this.spacesOccupied = [];
 };
 
@@ -207,9 +215,25 @@ Pieces.prototype.setBounds = function() {
   this.left = [];
   this.right = [];
   this.bottom = [];
-  this.setLeft();
-  this.setRight();
-  this.setBottom();
+  if (this.pieceType === "line") {
+    this.setLineBounds();
+  } else {
+    this.setLeft();
+    this.setRight();
+    this.setBottom();
+  }
+};
+
+Pieces.prototype.setLineBounds = function() {
+  if (this.spacesOccupied.includes(1)) {
+    this.left = [[1,-1]];
+    this.right = [[1,2]];
+    this.bottom = [[1,-1],[1,0],[1,1],[1,2]];
+  } else {
+    this.left = [[1,0],[0,0],[-1,0],[-2,0]];
+    this.right = [[1,0],[0,0],[-1,0],[-2,0]];
+    this.bottom = [[1,0]]
+  }
 };
 
 Pieces.prototype.setLeft = function() {
@@ -267,6 +291,10 @@ Pieces.prototype.setOccupies = function() {
 
 Pieces.prototype.rotatePiece = function(parentObj) {
   /* rotates the pieces clockwise based on their current location in the basic 9-box grid */
+  if (this.pieceType === "line") {
+    this.rotateLine(parentObj);
+    return;
+  }
   var newSpacesOccupied = [];
   for (i = 0; i < this.spacesOccupied.length; i++) {
     switch (this.spacesOccupied[i]) {
@@ -309,6 +337,24 @@ Pieces.prototype.rotatePiece = function(parentObj) {
     this.setBounds();
   }
 }
+
+Pieces.prototype.rotateLine = function(parentObj) {
+  var newSpacesOccupied = []
+  if (this.spacesOccupied.includes(1)) {
+    newSpacesOccupied.push(2, 5, 8, 11);
+  } else {
+    newSpacesOccupied.push(1, 2, 3, 10)
+  }
+  var testSpaces = [];
+  for (i = 0; i < newSpacesOccupied.length; i++) {
+    testSpaces.push(this.possibleSpaces[newSpacesOccupied[i] - 1]);
+  }
+  if (Board.prototype.confirmClear(this.location, testSpaces, parentObj)) {
+    this.spacesOccupied = newSpacesOccupied;
+    this.setOccupies();
+    this.setBounds();
+  }
+};
 
 Pieces.prototype.setToT = function() {
   this.pieceType = "t";
@@ -354,21 +400,44 @@ Pieces.prototype.setToReverseL = function() {
 
 Pieces.prototype.setToLine = function() {
   this.pieceType = "line";
+  this.spacesOccupied.push(1,2,3,10);
+  this.setOccupies();
+  this.setBounds();
 };
+
 
 var board = new Board();
 
 // front end logic starts here
-$(document).keydown(function(event) {
-  var key = event.which;
-  if (key === 37) {
-    board.leftCurrentPiece();
-  } else if (key === 39) {
-    board.rightCurrentPiece();
-  } else if (key === 40) {
-    board.lowerCurrentPiece();
-  } else if (key === 38) {
-    board.rotatePiece();
-  }
 
+
+$(document).ready(function() {
+  var counter = 500;
+  var runGame = function() {
+    clearInterval(interval);
+    board.lowerCurrentPiece();
+    interval = setInterval(runGame, counter);
+  }
+  var interval = setInterval(runGame, counter);
+
+  function runGame() {
+    board.lowerCurrentPiece();
+    if (board.lines >= 1) {
+      interval = 500;
+    }
+    var timeoutID = setTimeout(runGame, interval)
+  };
+
+  $(document).keydown(function(event) {
+    var key = event.which;
+    if (key === 37) {
+      board.leftCurrentPiece();
+    } else if (key === 39) {
+      board.rightCurrentPiece();
+    } else if (key === 40) {
+      board.lowerCurrentPiece();
+    } else if (key === 38) {
+      board.rotatePiece();
+    }
+  });
 });

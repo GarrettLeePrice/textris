@@ -15,12 +15,39 @@ Board.prototype.buildBoard = function() {
   }
 };
 
+Board.prototype.removeRow = function(row) {
+  this.rows.splice(row, 1);
+  var newRow = [];
+  for (i = 0; i < 10; i++) {
+    newRow.push("O");
+  }
+  this.rows.unshift(newRow);
+  this.displayBoard();
+};
+
+Board.prototype.findFullRows = function() {
+  for (i = 0; i < 20; i++) {
+    var test = true;
+    for (j = 0; j < 10; j++) {
+      if (this.rows[i][j] === "O") {
+        var test = false;
+        break;
+      }
+    }
+    if (!test) {
+      continue;
+    }
+    this.removeRow(i);
+  }
+};
+
 Board.prototype.lowerCurrentPiece = function() {
   if (this.isBottomClear()) {
     this.clearCurrentPieceLocation();
     this.currentPiece.location[0]++;
     this.populateCurrentPiece();
   } else {
+    this.findFullRows();
     this.currentPiece = this.getNewPiece();
     this.populateCurrentPiece();
   }
@@ -118,13 +145,25 @@ Board.prototype.rotatePiece = function() {
 
 Board.prototype.getNewPiece = function() {
   var newPiece = new Pieces();
-  var rando = Math.ceil(Math.random() * 2);
+  var rando = Math.ceil(Math.random() * 6);
   switch (rando) {
     case 1:
       newPiece.setToT();
       break;
     case 2:
       newPiece.setToSquare();
+      break;
+    case 3:
+      newPiece.setToL();
+      break;
+    case 4:
+      newPiece.setToReverseL();
+      break;
+    case 5:
+      newPiece.setToZ();
+      break;
+    case 6:
+      newPiece.setToReverseZ();
       break;
   }
   return newPiece;

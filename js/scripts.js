@@ -27,7 +27,7 @@ Board.prototype.isBottomClear = function() {
   for (i = 0; i < this.currentPiece.bottom.length; i++) {
     var row = this.currentPiece.location[0] + this.currentPiece.bottom[i][0] + 1;
     var column = this.currentPiece.location[1] + this.currentPiece.bottom[i][1];
-    console.log(row);
+    // console.log(row);
     if (row > 19) {
       return false;
     }
@@ -113,6 +113,25 @@ Board.prototype.getNewPiece = function() {
   return newPiece;
 };
 
+Board.prototype.confirmClear = function(location, relativeCoordinates) {
+
+  for (i = 0; i < relativeCoordinates.length; i++) {
+    var row = location[0] + relativeCoordinates[i][0];
+    var column = location[1] + relativeCoordinates[i][1];
+    console.log(row + " " + column);
+    if (column > 9) {
+      return false;
+    } else if (column < 0) {
+      return false;
+    } else if (row > 19) {
+      return false;
+    } else if (row < 0) {
+      return false;
+    }
+  }
+  return true;
+};
+
 // Pieces object starts here
 var Pieces = function() {
   this.location = [4, 4];
@@ -133,17 +152,21 @@ Pieces.prototype.setToT = function() {
 };
 
 Pieces.prototype.setBounds = function() {
-  this.setRight();
   /* will set this.left, right, and bottom to be checked elsewhere */
-
-}
+  this.left = [];
+  this.right = [];
+  this.bottom = [];
+  this.setLeft();
+  this.setRight();
+  this.setBottom();
+};
 
 Pieces.prototype.setLeft = function() {
   /* Sets the coordinates for the left-most spaces occupied. Searches spaces 1-3 until it finds something, then 4-6, then 7-9 */
   for (i = 1; i < 10;) {
     var j = i + 3;
     for (; i < j; i++) {
-      console.log(i);
+      // console.log(i);
       if (this.spacesOccupied.includes(i)) {
         this.left.push(this.possibleSpaces[i-1]);
         i = j;
@@ -158,14 +181,29 @@ Pieces.prototype.setRight = function() {
   for (i = 9; i > 0;) {
     var j = i - 3;
     for (; i > j; i--) {
-      console.log(i);
+      // console.log(i);
       if (this.spacesOccupied.includes(i)) {
-        this.left.push(this.possibleSpaces[i-1]);
+        this.right.push(this.possibleSpaces[i-1]);
         i = j;
         break;
       }
     }
   }
+};
+
+Pieces.prototype.setBottom = function() {
+  for (i = 1; i < 4; i++) {
+    if (this.spacesOccupied.includes(i)) {
+      // debugger;
+      this.bottom.push(this.possibleSpaces[i - 1]);
+    } else if (this.spacesOccupied.includes(i + 3)) {
+      this.bottom.push(this.possibleSpaces[i + 2]);
+    } else if (this.spacesOccupied.includes(i + 6)) {
+      this.bottom.push(this.possibleSpaces[i + 5]);
+    }
+    console.log(this.bottom);
+  }
+
 };
 
 Pieces.prototype.setOccupies = function() {
@@ -210,8 +248,15 @@ Pieces.prototype.rotatePiece = function() {
         break;
     }
   }
-  this.spacesOccupied = newSpacesOccupied;
-  this.setOccupies();
+  var testSpaces = [];
+  for (i = 0; i < newSpacesOccupied.length; i++) {
+    testSpaces.push(this.possibleSpaces[newSpacesOccupied[i] - 1]);
+  }
+  if (Board.prototype.confirmClear(this.location, testSpaces)) {
+    this.spacesOccupied = newSpacesOccupied;
+    this.setOccupies();
+    this.setBounds();
+  }
 }
 
 Pieces.prototype.setToSquare = function() {

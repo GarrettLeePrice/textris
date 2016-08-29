@@ -447,13 +447,17 @@ $(document).ready(function() {
     }
     interval = setInterval(runGame, counter);
   }
-  interval = setInterval(runGame, counter);
+  // interval = setInterval(runGame, counter);
+
   function startGame() {
     interval = setInterval(runGame, counter);
   }
+
   function stopGame() {
     stop = true;
   }
+
+
 
   $(document).keydown(function(event) {
     var key = event.which;
@@ -467,4 +471,15 @@ $(document).ready(function() {
       board.rotatePiece();
     }
   });
+
+
+  $("#button1").click(function(){
+    startGame();
+  });
+
+  $("#button2").click(function(){
+    board.resetGame();
+  });
+
+
 });

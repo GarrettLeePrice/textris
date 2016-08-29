@@ -25,7 +25,7 @@ Board.prototype.removeRow = function(row) {
   this.rows.unshift(newRow);
   this.displayBoard();
   this.lines++;
-  // console.log(this.lines);
+  console.log(this.lines);
 };
 
 Board.prototype.findFullRows = function() {
@@ -476,6 +476,7 @@ $(document).ready(function() {
   var runGame = function() {
     clearInterval(interval);
     board.lowerCurrentPiece();
+    $(".linesRemoved").text(board.lines);
     processGame();
     if (stop) {
       stop = false;
@@ -520,6 +521,7 @@ $(document).ready(function() {
   });
 
   $("#button2").click(function(){
+    stopGame();
     board.resetGame();
   });
 

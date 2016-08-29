@@ -4,6 +4,7 @@ function Board() {
   this.nextPiece = this.getNewPiece();
   this.buildBoard();
   this.lines = 0;
+  this.loss = false;
 };
 
 Board.prototype.buildBoard = function() {
@@ -207,6 +208,7 @@ Board.prototype.resetGame = function() {
   this.nextPiece = this.getNewPiece();
   this.buildBoard();
   this.lines = 0;
+  this.loss = false;
 };
 
 Board.prototype.checkLoseCondition = function() {
@@ -215,7 +217,8 @@ Board.prototype.checkLoseCondition = function() {
       var row = this.currentPiece.location[0] + this.currentPiece.occupies[i][0];
       // console.log(row);
       if (row < 0) {
-        this.resetGame();
+        this.loss = true;
+        alert("You lose");
       }
     }
   }
@@ -470,7 +473,7 @@ $(document).ready(function() {
   board.displayBoard();
   var counter = 200;
   var interval;
-  var stop = false;
+  var stop = true;
   var mainCanvas = document.getElementById("gameCanvas");;
   var mainContext = mainCanvas.getContext("2d");
   var runGame = function() {
@@ -478,6 +481,10 @@ $(document).ready(function() {
     board.lowerCurrentPiece();
     $(".linesRemoved").text(board.lines);
     processGame();
+    if (board.loss === true) {
+      stopGame();
+      return;
+    }
     if (stop) {
       stop = false;
       return;
@@ -487,13 +494,14 @@ $(document).ready(function() {
   // interval = setInterval(runGame, counter);
 
   function startGame() {
-    interval = setInterval(runGame, counter);
+    if (stop === true) {
+      stop = false;
+      interval = setInterval(runGame, counter);
+    }
   }
-
   function stopGame() {
     stop = true;
   }
-
 
   setInterval(processGame, 30);
 
@@ -505,13 +513,21 @@ $(document).ready(function() {
   $(document).keydown(function(event) {
     var key = event.which;
     if (key === 37) {
-      board.leftCurrentPiece();
+      if (board.loss === false) {
+        board.leftCurrentPiece();
+      }
     } else if (key === 39) {
-      board.rightCurrentPiece();
+      if (board.loss === false) {
+        board.rightCurrentPiece();
+      }
     } else if (key === 40) {
-      board.lowerCurrentPiece();
+      if (board.loss === false) {
+        board.lowerCurrentPiece();
+      }
     } else if (key === 38) {
-      board.rotatePiece();
+      if (board.loss === false) {
+        board.rotatePiece();
+      }
     }
   });
 

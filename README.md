@@ -33,6 +33,11 @@ Recreation of the basic Tetris game.
 
 * build basic html layout. Hold game board, display lines cleared, start and reset buttons.
 
+* build shapes with color using canvas  
+  * all shapes have independant colors and black borders
+
+* merge design and construction branches to master for MVP
+
 
 
 
@@ -49,7 +54,7 @@ _{Leave nothing to chance! You want it to be easy for potential users, employers
 
 ## Known Bugs
 
-_{Are there issues that have not yet been resolved that you want to let users know you know?  Outline any issues that would impact use of your application.  Share any workarounds that are in place. }_
+_1. If turned shape at moment of contact with another shape, new shape overrides occupied space_
 
 ## Support and contact details
 

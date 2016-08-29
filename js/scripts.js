@@ -1,7 +1,6 @@
 function Board() {
   this.rows = [];
   this.currentPiece = this.getNewPiece();
-  this.blocks = [];
   this.buildBoard();
   this.lines = 0;
 };
@@ -25,7 +24,7 @@ Board.prototype.removeRow = function(row) {
   this.rows.unshift(newRow);
   this.displayBoard();
   this.lines++;
-  console.log(this.lines);
+  // console.log(this.lines);
 };
 
 Board.prototype.findFullRows = function() {
@@ -197,6 +196,17 @@ Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj
     }
   }
   return true;
+};
+
+Board.prototype.resetGame = function() {
+  this.rows = [];
+  this.currentPiece = this.getNewPiece();
+  this.buildBoard();
+  this.lines = 0;
+};
+
+Board.prototype.checkLoseCondition = function() {
+
 };
 
 // Pieces object starts here

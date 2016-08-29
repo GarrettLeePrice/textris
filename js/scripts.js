@@ -506,7 +506,14 @@ $(document).ready(function() {
   }
   // interval = setInterval(runGame, counter);
 
+  // function play(){
+  //        var audio = document.getElementById("audio");
+  //        audio.play();
+  //                  }
+
+
   function startGame() {
+
     if (stop === true) {
       stop = false;
       interval = setInterval(runGame, counter);
@@ -543,15 +550,18 @@ $(document).ready(function() {
       }
     }
   });
+  var audio = new Audio('Audio/tetris.mp3');
 
 
   $("#button1").click(function(){
     startGame();
+    audio.play();
   });
 
   $("#button2").click(function(){
     stopGame();
     board.resetGame();
+    audio.pause();
   });
 
 

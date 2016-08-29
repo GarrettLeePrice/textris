@@ -3,6 +3,10 @@ body {
   font-size: 20px;
 }
 
+canvas {
+  border: 1px solid black;
+}
+
 .floating-box1 {
   background-color: darkgreen;
     float: left;

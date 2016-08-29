@@ -31,6 +31,8 @@ Recreation of the basic Tetris game.
 
 * add start button for player interactivity
 
+* build basic html layout. Hold game board, display lines cleared, start and reset buttons.
+
 
 
 

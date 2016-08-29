@@ -81,7 +81,7 @@ Board.prototype.rightCurrentPiece = function() {
 };
 
 Board.prototype.isRightClear = function() {
-  console.log(this.right);
+  // console.log(this.right);
   for (i = 0; i < this.currentPiece.right.length; i++) {
     var row = this.currentPiece.location[0] + this.currentPiece.right[i][0];
     var column = this.currentPiece.location[1] + this.currentPiece.right[i][1] + 1;
@@ -131,20 +131,20 @@ Board.prototype.populateCurrentPiece = function() {
     var row = this.currentPiece.location[0] + this.currentPiece.occupies[i][0];
     var column = this.currentPiece.location[1] + this.currentPiece.occupies[i][1];
     if (row >= 0) {
-      this.rows[row][column] = "&#9632;";
+      this.rows[row][column] = this.currentPiece.color;
     }
   }
   this.displayBoard();
 };
 
 Board.prototype.displayBoard = function() {
-  $("body").text("");
-  this.rows.forEach(function(row) {
-    row.forEach(function(cell) {
-      $("body").append(cell + " ");
-    })
-    $("body").append("<br>");
-  })
+  // $("body").text("");
+  // this.rows.forEach(function(row) {
+  //   row.forEach(function(cell) {
+  //     $("body").append(cell + " ");
+  //   })
+  //   $("body").append("<br>");
+  // })
 };
 
 Board.prototype.rotatePiece = function() {
@@ -231,6 +231,7 @@ function Pieces() {
   this.pieceType;
   this.possibleSpaces = [[1,-1], [1,0], [1,1], [0,-1], [0,0], [0,1], [-1,-1], [-1,0], [-1,1], [1,2], [-2,0]];
   this.spacesOccupied = [];
+  this.color;
 };
 
 Pieces.prototype.setBounds = function() {
@@ -386,6 +387,7 @@ Pieces.prototype.setToT = function() {
   this.spacesOccupied.push(1, 2, 3, 5);
   this.setOccupies();
   this.setBounds();
+  this.color = "blue";
 };
 
 Pieces.prototype.setToSquare = function() {
@@ -393,6 +395,7 @@ Pieces.prototype.setToSquare = function() {
   this.spacesOccupied.push(1, 2, 4, 5);
   this.setOccupies();
   this.setBounds();
+  this.color = "red";
 };
 
 Pieces.prototype.setToZ = function() {
@@ -400,6 +403,7 @@ Pieces.prototype.setToZ = function() {
   this.spacesOccupied.push(2, 3, 4, 5);
   this.setOccupies();
   this.setBounds();
+  this.color = "yellow";
 };
 
 Pieces.prototype.setToReverseZ = function() {
@@ -407,6 +411,7 @@ Pieces.prototype.setToReverseZ = function() {
   this.spacesOccupied.push(1, 2, 5, 6);
   this.setOccupies();
   this.setBounds();
+  this.color = "orange";
 };
 
 Pieces.prototype.setToL = function() {
@@ -414,6 +419,7 @@ Pieces.prototype.setToL = function() {
   this.spacesOccupied.push(1, 2, 3, 6);
   this.setOccupies();
   this.setBounds();
+  this.color = "green";
 };
 
 Pieces.prototype.setToReverseL = function() {
@@ -421,6 +427,7 @@ Pieces.prototype.setToReverseL = function() {
   this.spacesOccupied.push(1, 2, 3, 4);
   this.setOccupies();
   this.setBounds();
+  this.color = "purple";
 };
 
 Pieces.prototype.setToLine = function() {
@@ -428,19 +435,48 @@ Pieces.prototype.setToLine = function() {
   this.spacesOccupied.push(1,2,3,10);
   this.setOccupies();
   this.setBounds();
+  this.color = "magenta";
 };
 
 // front end logic starts here
+Board.prototype.drawCanvas = function(context, canvas) {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.beginPath();
+  var squareWidth = canvas.width / 10;
+  var currentRow = 0;
+  var currentColumn = 0;
+  // context.rect(currentColumn, currentRow, squareWidth, squareWidth);
+
+  for (i = 0; i < 20; i++) {
+    for (j = 0; j < 10; j++) {
+      if (this.rows[i][j] !== "O") {
+        context.fillStyle=this.rows[i][j];
+        context.fillRect(currentColumn, currentRow, squareWidth, squareWidth);
+        context.fillStyle="black";
+        context.strokeRect(currentColumn, currentRow, squareWidth, squareWidth);
+      }
+      currentColumn += squareWidth;
+    }
+    currentRow += squareWidth;
+    currentColumn = 0;
+  }
+  context.stroke();
+  context.closePath();
+};
+
 var board = new Board();
 
 $(document).ready(function() {
   board.displayBoard();
-  var counter = 500;
+  var counter = 200;
   var interval;
   var stop = false;
+  var mainCanvas = document.getElementById("gameCanvas");;
+  var mainContext = mainCanvas.getContext("2d");
   var runGame = function() {
     clearInterval(interval);
     board.lowerCurrentPiece();
+    processGame();
     if (stop) {
       stop = false;
       return;
@@ -453,6 +489,12 @@ $(document).ready(function() {
   }
   function stopGame() {
     stop = true;
+  }
+
+  setInterval(processGame, 30);
+
+  function processGame() {
+    board.drawCanvas(mainContext, mainCanvas);
   }
 
   $(document).keydown(function(event) {

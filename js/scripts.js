@@ -1,6 +1,7 @@
 function Board() {
   this.rows = [];
   this.currentPiece = this.getNewPiece();
+  this.nextPiece = this.getNewPiece();
   this.buildBoard();
   this.lines = 0;
 };
@@ -51,7 +52,8 @@ Board.prototype.lowerCurrentPiece = function() {
   } else {
     this.checkLoseCondition();
     this.findFullRows();
-    this.currentPiece = this.getNewPiece();
+    this.currentPiece = this.nextPiece;
+    this.nextPiece = this.getNewPiece();
     this.populateCurrentPiece();
   }
 };
@@ -63,7 +65,7 @@ Board.prototype.isBottomClear = function() {
     // console.log(row);
     if (row > 19) {
       return false;
-    } else if (this.rows[row][column] !== "O") {
+    } else if (row >= 0 && this.rows[row][column] !== "O") {
       return false;
     }
   }
@@ -202,6 +204,7 @@ Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj
 Board.prototype.resetGame = function() {
   this.rows = [];
   this.currentPiece = this.getNewPiece();
+  this.nextPiece = this.getNewPiece();
   this.buildBoard();
   this.lines = 0;
 };
@@ -444,6 +447,7 @@ $(document).ready(function() {
     }
     interval = setInterval(runGame, counter);
   }
+  interval = setInterval(runGame, counter);
   function startGame() {
     interval = setInterval(runGame, counter);
   }

@@ -1,12 +1,39 @@
-# _{Application Name}_
+# _Tetris_
 
-#### _{Brief description of application}, {Date of current version}_
+#### _Tetris, you know what it is.}, 8.29.16_
 
-#### By _**{List of contributors}**_
+#### By _Ryan Apking, Josh Casuccio, Nhat Hoang, Garrett Price_
 
 ## Description
 
-_{This is a detailed description of your application. Its purpose and usage.  Give as much detail as needed to explain what the application does, and any other information you want users or other developers to have. }_
+Recreation of the basic Tetris game.
+
+## Specifications
+
+* Build basic board
+  * initially building text based. If possible, redo in canvas.
+  20 rows / 10 columns
+
+* animate 1 small component of pieces
+
+* ability to shift part left to right
+
+* ability to rotate parts
+
+* construct basic tetris shapes
+  * All parts made of 4 small squares. 2 L shapes, Cube, T shape, 2 Z shapes, Line
+
+* Randomize falling shapes
+
+* remove line once 10 columns in any row are filled. This will not exceed 4 based on shape sizes
+
+* add alert to signal end of game. This will happen if enough lines are not cleared, and shapes reach top of  gameboard
+
+* add start button for player interactivity
+
+
+
+
 
 ## Setup/Installation Requirements
 

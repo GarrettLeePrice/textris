@@ -49,6 +49,7 @@ Board.prototype.lowerCurrentPiece = function() {
     this.currentPiece.location[0]++;
     this.populateCurrentPiece();
   } else {
+    this.checkLoseCondition();
     this.findFullRows();
     this.currentPiece = this.getNewPiece();
     this.populateCurrentPiece();
@@ -206,7 +207,15 @@ Board.prototype.resetGame = function() {
 };
 
 Board.prototype.checkLoseCondition = function() {
-
+  if (this.currentPiece.location[0] < 1) {
+    for (i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
+      var row = this.currentPiece.location[0] + this.currentPiece.occupies[i][0];
+      // console.log(row);
+      if (row < 0) {
+        this.resetGame();
+      }
+    }
+  }
 };
 
 // Pieces object starts here
@@ -424,20 +433,23 @@ var board = new Board();
 $(document).ready(function() {
   board.displayBoard();
   var counter = 500;
+  var interval;
+  var stop = false;
   var runGame = function() {
     clearInterval(interval);
     board.lowerCurrentPiece();
+    if (stop) {
+      stop = false;
+      return;
+    }
     interval = setInterval(runGame, counter);
   }
-  var interval = setInterval(runGame, counter);
-
-  function runGame() {
-    board.lowerCurrentPiece();
-    if (board.lines >= 1) {
-      interval = 500;
-    }
-    var timeoutID = setTimeout(runGame, interval)
-  };
+  function startGame() {
+    interval = setInterval(runGame, counter);
+  }
+  function stopGame() {
+    stop = true;
+  }
 
   $(document).keydown(function(event) {
     var key = event.which;

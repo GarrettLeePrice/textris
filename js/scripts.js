@@ -138,12 +138,12 @@ Board.prototype.populateCurrentPiece = function() {
 };
 
 Board.prototype.displayBoard = function() {
-  $("body").text("");
+  $(".gameBoard").text("");
   this.rows.forEach(function(row) {
     row.forEach(function(cell) {
-      $("body").append(cell + " ");
+      $(".gameBoard").append(cell + " ");
     })
-    $("body").append("<br>");
+    $(".gameBoard").append("<br>");
   })
 };
 

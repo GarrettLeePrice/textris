@@ -1,6 +1,7 @@
 body {
   font-family: "Courier New", Courier, monospace;
-  font-size: 20px;
+  font-size: 26px;
+  text-align: center;
 }
 .header {
 
@@ -33,7 +34,7 @@ body {
     margin-bottom: 0px;
     border: 30px solid #73AD21;
     float: none;
-    
+
   }
 
   .lines {

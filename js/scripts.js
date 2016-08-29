@@ -5,6 +5,7 @@ function Board() {
   this.buildBoard();
   this.lines = 0;
   this.loss = false;
+  this.score = 0;
 };
 
 Board.prototype.buildBoard = function() {
@@ -26,10 +27,10 @@ Board.prototype.removeRow = function(row) {
   this.rows.unshift(newRow);
   this.displayBoard();
   this.lines++;
-  console.log(this.lines);
 };
 
 Board.prototype.findFullRows = function() {
+  var linesToClear = 0;
   for (i = 0; i < 20; i++) {
     var test = true;
     for (j = 0; j < 10; j++) {
@@ -41,9 +42,20 @@ Board.prototype.findFullRows = function() {
     if (!test) {
       continue;
     }
+    linesToClear++;
     this.removeRow(i);
   }
+  this.addToScore(linesToClear);
+  console.log(this.score);
 };
+
+Board.prototype.addToScore = function(lines) {
+  if (lines === 4) {
+    this.score += 800;
+  } else {
+    this.score += (lines * 100);
+  }
+}
 
 Board.prototype.lowerCurrentPiece = function() {
   if (this.isBottomClear()) {
@@ -188,7 +200,7 @@ Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj
   for (i = 0; i < relativeCoordinates.length; i++) {
     var row = location[0] + relativeCoordinates[i][0];
     var column = location[1] + relativeCoordinates[i][1];
-    console.log(row + " " + column);
+    // console.log(row + " " + column);
     if (column > 9) {
       return false;
     } else if (column < 0) {
@@ -209,6 +221,7 @@ Board.prototype.resetGame = function() {
   this.buildBoard();
   this.lines = 0;
   this.loss = false;
+  this.score = 0;
 };
 
 Board.prototype.checkLoseCondition = function() {

@@ -2,16 +2,86 @@ body {
   font-family: "Courier New", Courier, monospace;
   font-size: 20px;
 }
+.header {
 
+<<<<<<< HEAD
 canvas {
   border: 1px solid black;
 }
 
 .floating-box1 {
+=======
+}
+
+.jumbotron {
+  text-align: center;
+  font-family:arial,Helvetica,sans-serif;
+  font-size: 20pt;
+}
+
+#button1 {
+  margin-left: 100px;
+  float:left;
+  margin-top: 12px;
+
+}
+#button2 {
+  margin-left: auto;
+  margin-right:10px;
+  float: right;
+  margin-top: 12px;
+}
+
+.gameBoard {
+>>>>>>> master
   background-color: darkgreen;
-    float: left;
-    width: 150px;
-    height: 150px;
-    margin: 15px;
+
+    width: 400px;
+    height: 800px;
+    margin-bottom: 0px;
     border: 30px solid #73AD21;
-  };
+    float: none;
+    
+  }
+
+  .lines {
+      width: 300px;
+      height: 100px;
+      border: 10px solid #73AD21;
+    }
+
+#rightColumn {
+  float: right;
+
+}
+.scoreBoard {
+    width: 300px;
+    height: 100px;
+    border: 10px solid #73AD21;
+  }
+  .nextPiece {
+    width: 300px;
+    height: 300px;
+    border: 10px solid #73AD21;
+
+  }
+
+  .currentLevel {
+    width: 300px;
+    height: 300px;
+    border: 10px solid #73AD21;
+
+  }
+
+  .graphicBox {
+    width: 300px;
+    height: 750px;
+    border: 10px solid #73AD21;
+    float: right;
+
+  }
+
+  .container {
+    height: 900px;
+    width:auto;
+  }

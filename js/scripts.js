@@ -122,7 +122,7 @@ Board.prototype.partOfCurrentPiece = function(location) {
 
 Board.prototype.checkSpace = function(newLocation) {
   for (var i = 0; i < this.currentPiece.occupies.length; i++) {
-    console.log(i);
+    // console.log(i);
     var row = newLocation[0] + this.currentPiece.occupies[i][0];
     var column = newLocation[1] + this.currentPiece.occupies[i][1];
     if (row >= 20 || column >= 10 || column < 0) {
@@ -159,15 +159,15 @@ Board.prototype.displayBoard = function() {
 };
 
 Board.prototype.rotatePiece = function() {
-  if (this.pieceType === "line") {
-    this.rotateLine(parentObj);
+  if (this.currentPiece.pieceType === "line") {
+    this.rotateLine();
     return;
-  } else if (this.pieceType === "square") {
+  } else if (this.currentPiece.pieceType === "square") {
     return;
   }
   var newSpacesOccupied = [];
-  for (var i = 0; i < this.spacesOccupied.length; i++) {
-    switch (this.spacesOccupied[i]) {
+  for (var i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
+    switch (this.currentPiece.spacesOccupied[i]) {
       case 1:
         newSpacesOccupied.push(7)
         break;
@@ -199,13 +199,50 @@ Board.prototype.rotatePiece = function() {
   }
   var testSpaces = [];
   for (var i = 0; i < newSpacesOccupied.length; i++) {
-    testSpaces.push(this.possibleSpaces[newSpacesOccupied[i] - 1]);
+    var space = newSpacesOccupied[i]-1;
+    var row = this.currentPiece.location[0] + this.currentPiece.possibleSpaces[space][0];
+    var column = this.currentPiece.location[1] + this.currentPiece.possibleSpaces[space][1];
+    testSpaces.push([row, column]);
   }
-  if (Board.prototype.confirmClear(this.location, testSpaces, parentObj)) {
-    this.spacesOccupied = newSpacesOccupied;
-    this.setOccupies();
-    this.setBounds();
+  if (this.checkRotateSpace(testSpaces)) {
+    this.clearCurrentPieceLocation();
+    this.currentPiece.spacesOccupied = newSpacesOccupied;
+    this.currentPiece.setOccupies();
+    this.populateCurrentPiece();
   }
+};
+
+Board.prototype.rotateLine = function() {
+  var newSpacesOccupied = []
+  if (this.currentPiece.spacesOccupied.includes(1)) {
+    newSpacesOccupied.push(2, 5, 8, 11);
+  } else {
+    newSpacesOccupied.push(1, 2, 3, 10)
+  }
+  var testSpaces = [];
+  for (var i = 0; i < newSpacesOccupied.length; i++) {
+    var space = newSpacesOccupied[i]-1;
+    var row = this.currentPiece.location[0] + this.currentPiece.possibleSpaces[space][0];
+    var column = this.currentPiece.location[1] + this.currentPiece.possibleSpaces[space][1];
+    testSpaces.push([row, column]);
+  }
+  if (this.checkRotateSpace(testSpaces)) {
+    this.clearCurrentPieceLocation();
+    this.currentPiece.spacesOccupied = newSpacesOccupied;
+    this.currentPiece.setOccupies();
+    this.populateCurrentPiece();
+  }
+};
+
+Board.prototype.checkRotateSpace = function(coordinates) {
+  for (var i = 0; i < coordinates.length; i++) {
+    if (this.rows[coordinates[i][0]][coordinates[i][1]] !== "O") {
+      if (!this.partOfCurrentPiece(coordinates[i])) {
+        return false;
+      }
+    }
+  }
+  return true;
 };
 
 Board.prototype.getNewPiece = function() {
@@ -371,23 +408,7 @@ Pieces.prototype.setOccupies = function() {
   }
 };
 
-Pieces.prototype.rotateLine = function(parentObj) {
-  var newSpacesOccupied = []
-  if (this.spacesOccupied.includes(1)) {
-    newSpacesOccupied.push(2, 5, 8, 11);
-  } else {
-    newSpacesOccupied.push(1, 2, 3, 10)
-  }
-  var testSpaces = [];
-  for (var i = 0; i < newSpacesOccupied.length; i++) {
-    testSpaces.push(this.possibleSpaces[newSpacesOccupied[i] - 1]);
-  }
-  if (Board.prototype.confirmClear(this.location, testSpaces, parentObj)) {
-    this.spacesOccupied = newSpacesOccupied;
-    this.setOccupies();
-    this.setBounds();
-  }
-};
+
 
 Pieces.prototype.setToT = function() {
   this.pieceType = "t";

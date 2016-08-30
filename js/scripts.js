@@ -122,7 +122,6 @@ Board.prototype.partOfCurrentPiece = function(location) {
 
 Board.prototype.checkSpace = function(newLocation) {
   for (var i = 0; i < this.currentPiece.occupies.length; i++) {
-    // console.log(i);
     var row = newLocation[0] + this.currentPiece.occupies[i][0];
     var column = newLocation[1] + this.currentPiece.occupies[i][1];
     if (row >= 20 || column >= 10 || column < 0) {
@@ -279,7 +278,6 @@ Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj
   for (var i = 0; i < relativeCoordinates.length; i++) {
     var row = location[0] + relativeCoordinates[i][0];
     var column = location[1] + relativeCoordinates[i][1];
-    // console.log(row + " " + column);
     if (column > 9) {
       return false;
     } else if (column < 0) {
@@ -307,11 +305,10 @@ Board.prototype.checkLoseCondition = function() {
   if (this.currentPiece.location[0] < 1) {
     for (var i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
       var row = this.currentPiece.location[0] + this.currentPiece.occupies[i][0];
-      // console.log(row);
       if (row < 0) {
         this.loss = true;
-        alert("You lose");
-    
+        // alert("You lose");
+
       }
     }
   }
@@ -321,84 +318,10 @@ Board.prototype.checkLoseCondition = function() {
 function Pieces() {
   this.location = [-1, 4];
   this.occupies = [];
-  this.left = [];
-  this.right = [];
-  this.bottom = [];
   this.pieceType;
   this.possibleSpaces = [[1,-1], [1,0], [1,1], [0,-1], [0,0], [0,1], [-1,-1], [-1,0], [-1,1], [1,2], [-2,0]];
   this.spacesOccupied = [];
   this.color;
-};
-
-Pieces.prototype.setBounds = function() {
-  /* will set this.left, right, and bottom to be checked elsewhere */
-  this.left = [];
-  this.right = [];
-  this.bottom = [];
-  if (this.pieceType === "line") {
-    this.setLineBounds();
-  } else {
-    this.setLeft();
-    this.setRight();
-    this.setBottom();
-  }
-};
-
-Pieces.prototype.setLineBounds = function() {
-  if (this.spacesOccupied.includes(1)) {
-    this.left = [[1,-1]];
-    this.right = [[1,2]];
-    this.bottom = [[1,-1],[1,0],[1,1],[1,2]];
-  } else {
-    this.left = [[1,0],[0,0],[-1,0],[-2,0]];
-    this.right = [[1,0],[0,0],[-1,0],[-2,0]];
-    this.bottom = [[1,0]]
-  }
-};
-
-Pieces.prototype.setLeft = function() {
-  /* Sets the coordinates for the left-most spaces occupied. Searches spaces 1-3 until it finds something, then 4-6, then 7-9 */
-  for (var i = 1; i < 10;) {
-    var j = i + 3;
-    for (; i < j; i++) {
-      // console.log(i);
-      if (this.spacesOccupied.includes(i)) {
-        this.left.push(this.possibleSpaces[i-1]);
-        i = j;
-        break;
-      }
-    }
-  }
-};
-
-Pieces.prototype.setRight = function() {
-  /* Sets the coordinates for the right-most spaces occupied. Searches spaces 9, 8, 7, until it finds something, then 6, 5, 4, then 3, 2, 1*/
-  for (var i = 9; i > 0;) {
-    var j = i - 3;
-    for (; i > j; i--) {
-      // console.log(i);
-      if (this.spacesOccupied.includes(i)) {
-        this.right.push(this.possibleSpaces[i-1]);
-        i = j;
-        break;
-      }
-    }
-  }
-};
-
-Pieces.prototype.setBottom = function() {
-  for (var i = 1; i < 4; i++) {
-    if (this.spacesOccupied.includes(i)) {
-      // debugger;
-      this.bottom.push(this.possibleSpaces[i - 1]);
-    } else if (this.spacesOccupied.includes(i + 3)) {
-      this.bottom.push(this.possibleSpaces[i + 2]);
-    } else if (this.spacesOccupied.includes(i + 6)) {
-      this.bottom.push(this.possibleSpaces[i + 5]);
-    }
-    // console.log(this.bottom);
-  }
-
 };
 
 Pieces.prototype.setOccupies = function() {
@@ -409,13 +332,10 @@ Pieces.prototype.setOccupies = function() {
   }
 };
 
-
-
 Pieces.prototype.setToT = function() {
   this.pieceType = "t";
   this.spacesOccupied.push(1, 2, 3, 5);
   this.setOccupies();
-  this.setBounds();
   this.color = "blue";
 };
 
@@ -423,7 +343,6 @@ Pieces.prototype.setToSquare = function() {
   this.pieceType = "square";
   this.spacesOccupied.push(1, 2, 4, 5);
   this.setOccupies();
-  this.setBounds();
   this.color = "red";
 };
 
@@ -431,7 +350,6 @@ Pieces.prototype.setToZ = function() {
   this.pieceType = "z";
   this.spacesOccupied.push(2, 3, 4, 5);
   this.setOccupies();
-  this.setBounds();
   this.color = "yellow";
 };
 
@@ -439,7 +357,6 @@ Pieces.prototype.setToReverseZ = function() {
   this.pieceType="reverseZ";
   this.spacesOccupied.push(1, 2, 5, 6);
   this.setOccupies();
-  this.setBounds();
   this.color = "orange";
 };
 
@@ -447,7 +364,6 @@ Pieces.prototype.setToL = function() {
   this.pieceType="l";
   this.spacesOccupied.push(1, 2, 3, 6);
   this.setOccupies();
-  this.setBounds();
   this.color = "green";
 };
 
@@ -455,7 +371,6 @@ Pieces.prototype.setToReverseL = function() {
   this.pieceType = "reverseL";
   this.spacesOccupied.push(1, 2, 3, 4);
   this.setOccupies();
-  this.setBounds();
   this.color = "purple";
 };
 
@@ -463,7 +378,6 @@ Pieces.prototype.setToLine = function() {
   this.pieceType = "line";
   this.spacesOccupied.push(1,2,3,10);
   this.setOccupies();
-  this.setBounds();
   this.color = "magenta";
 };
 
@@ -497,6 +411,10 @@ var board = new Board();
 
 $(document).ready(function() {
   board.displayBoard();
+  var left = false;
+  var right = false;
+  var timePassed = 0;
+  var then = Date.now();
   var counter = 200;
   var interval;
   var stop = true;
@@ -517,16 +435,8 @@ $(document).ready(function() {
     }
     interval = setInterval(runGame, counter);
   }
-  // interval = setInterval(runGame, counter);
-
-  // function play(){
-  //        var audio = document.getElementById("audio");
-  //        audio.play();
-  //                  }
-
 
   function startGame() {
-
     if (stop === true) {
       stop = false;
       interval = setInterval(runGame, counter);
@@ -539,18 +449,32 @@ $(document).ready(function() {
   setInterval(processGame, 30);
 
   function processGame() {
+    var now = Date.now();
+    timePassed += now - then;
+    then = now;
     board.drawCanvas(mainContext, mainCanvas);
+    if (left && timePassed > 250) {
+      board.leftCurrentPiece();
+      timePassed = 0;
+    }
+    if (right && timePassed > 250) {
+      board.rightCurrentPiece();
+      timePassed = 0;
+    }
   }
-
 
   $(document).keydown(function(event) {
     var key = event.which;
     if (key === 37) {
       if (board.loss === false) {
+        left = true;
+        timePassed = 0;
         board.leftCurrentPiece();
       }
     } else if (key === 39) {
       if (board.loss === false) {
+        right = true;
+        timePassed = 0;
         board.rightCurrentPiece();
       }
     } else if (key === 40) {
@@ -563,20 +487,25 @@ $(document).ready(function() {
       }
     }
   });
+
+  $(document).keyup(function(event) {
+    var key = event.which;
+    if (key === 37) {
+      left = false;
+    } else if (key === 39) {
+      right = false;
+    }
+  })
+
   var audio = new Audio('Audio/tetris.mp3');
-
-
   $("#button1").click(function(){
     startGame();
     audio.play();
     audio.loop = true;
   });
-
   $("#button2").click(function(){
     stopGame();
     board.resetGame();
     audio.pause();
   });
-
-
 });

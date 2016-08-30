@@ -6,6 +6,11 @@ function Board() {
   this.lines = 0;
   this.loss = false;
   this.score = 0;
+  this.level = 0;
+};
+
+Board.prototype.trackLevel = function() {
+  this.level = Math.floor(this.lines / 10);
 };
 
 Board.prototype.buildBoard = function() {
@@ -54,6 +59,8 @@ Board.prototype.addToScore = function(lines) {
   } else {
     this.score += (lines * 100);
   }
+  this.trackLevel();
+  console.log(this.level);
 }
 
 Board.prototype.lowerCurrentPiece = function() {
@@ -299,6 +306,7 @@ Board.prototype.resetGame = function() {
   this.lines = 0;
   this.loss = false;
   this.score = 0;
+  this.level = 0;
 };
 
 Board.prototype.checkLoseCondition = function() {
@@ -415,7 +423,7 @@ $(document).ready(function() {
   var right = false;
   var timePassed = 0;
   var then = Date.now();
-  var counter = 200;
+  var counter = 600;
   var interval;
   var stop = true;
   var mainCanvas = document.getElementById("gameCanvas");;
@@ -424,6 +432,11 @@ $(document).ready(function() {
     clearInterval(interval);
     board.lowerCurrentPiece();
     $(".linesRemoved").text(board.lines);
+    // debugger;
+    counter = 600 - (board.level * 50);
+    if (counter < 100) {
+      counter = 100;
+    }
     processGame();
     if (board.loss === true) {
       stopGame();

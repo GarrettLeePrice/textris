@@ -232,6 +232,7 @@ Board.prototype.checkLoseCondition = function() {
       if (row < 0) {
         this.loss = true;
         alert("You lose");
+    
       }
     }
   }
@@ -556,6 +557,7 @@ $(document).ready(function() {
   $("#button1").click(function(){
     startGame();
     audio.play();
+    audio.loop = true;
   });
 
   $("#button2").click(function(){

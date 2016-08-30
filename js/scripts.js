@@ -424,6 +424,7 @@ $(document).ready(function() {
     clearInterval(interval);
     board.lowerCurrentPiece();
     $(".linesRemoved").text(board.lines);
+    $(".score").text(board.score);
     processGame();
     if (board.loss === true) {
       stopGame();

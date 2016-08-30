@@ -2,6 +2,7 @@ body {
   font-family: "Courier New", Courier, monospace;
   font-size: 26px;
   text-align: center;
+
 }
 
 canvas {
@@ -12,6 +13,9 @@ canvas {
   text-align: center;
   font-family:arial,Helvetica,sans-serif;
   font-size: 20pt;
+  /*background-image: url("../Img/tetrisLogo.jpg");*/
+  background-image: url("../Img/tetrisBackground.jpg");
+
 }
 
 #button1 {
@@ -28,12 +32,12 @@ canvas {
 }
 
 .gameBoard {
-  background-color: darkgreen;
+  background-color: lightblue;
 
     width: 400px;
     height: 730px;
     margin-bottom: 0px;
-    border: 30px solid #73AD21;
+    border: 3px solid #73AD21;
     float: none;
 
   }
@@ -41,41 +45,44 @@ canvas {
   .lines {
       width: 300px;
       height: 100px;
-      border: 10px solid #73AD21;
+      border: 3px solid #73AD21;
+      margin: 2px;
     }
 
 #rightColumn {
   float: right;
 
+
 }
 .scoreBoard {
     width: 300px;
     height: 100px;
-    border: 10px solid #73AD21;
+    border: 3px solid #73AD21;
+    margin: 2px;
   }
   .nextPiece {
     width: 300px;
     height: 300px;
-    border: 10px solid #73AD21;
-
+    border: 3px solid #73AD21;
+    margin: 2px;
   }
 
   .currentLevel {
     width: 300px;
     height: 300px;
-    border: 10px solid #73AD21;
-
+    border: 3px solid #73AD21;
+    margin: 2px;
   }
 
   .graphicBox {
     width: 300px;
     height: 750px;
-    border: 10px solid #73AD21;
-    float: right;
+    border: 3px solid #73AD21;
 
   }
 
   .container {
     height: 900px;
     width:auto;
+
   }

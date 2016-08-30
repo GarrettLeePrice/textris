@@ -8,30 +8,32 @@
     <title>Textris</title>
   </head>
   <body>
-    <div class="container">
+    <div class="container-fluid">
       <div class="jumbotron">
-        <h1>Tetris</h1>
+        <h1><img src="Img/tetrisLogo.jpg" height="200px" width="800px" alt="" /></h1>
 
       </div>
 
       <div class="row">
-        <div id="leftColumn" class="col-md-4">
-          <div class="graphicBox">Graphic Box
+        <div id="leftColumn" class="col col-md-4">
+          <div class="hidden-xs hidden-sm hidden-md graphicBox">Graphic Box
 
           </div>
-          <div id="button1" class="btn btn-success">
+        </div>
+        <div id="centerColumn" class="col col-md-4">
+          <div class="gameBoard">
+            <canvas id="gameCanvas" width="335" height="670"></canvas>
+            <button id="button1" class="btn btn-success" type="button" name="button">Start Game</button>
+            <button id="button2" class="btn btn-warning" type="button" name="button">Reset Game</button>
+          </div>
+          <!-- <div id="button1" class="btn btn-success">
             Start Game
           </div>
           <div id="button2" class="btn btn-warning">
             Reset Game
-          </div>
+          </div> -->
         </div>
-        <div id="centerColumn" class="col-md-4">
-          <div class="gameBoard">
-            <canvas id="gameCanvas" width="335" height="670"></canvas>
-          </div>
-        </div>
-        <div id="rightColumn" class="col-md-4">
+        <div id="rightColumn" class="col col-md-4">
           <div class="scoreBoard"> scoreBoard
           </div>
           <div class="lines"> Lines Removed:
@@ -39,9 +41,9 @@
 
             </div>
           </div>
-          <div class="nextPiece">Next Piece
+          <div class="hidden-xs hidden-sm nextPiece">Next Piece
           </div>
-          <div class="currentLevel">Current Level
+          <div class="hidden-xs hidden-sm currentLevel">Current Level
 
           </div>
         </div>

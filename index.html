@@ -10,19 +10,20 @@
   </head>
   <body>
     <div class="container">
-      <div class="jumbotron">
+      <div class="jumbotron hidden-xs">
         <img class="hidden-xs hidden-sm  img-fluid" src="Img/tetrisLogo2.png" height="200px" width="700px" alt="Responsive image" />
         <img class="visible-xs visible-sm img-fluid" src="Img/tetrisLogo2.png" height="200px" width="auto" alt="Responsive image" />
-
       </div>
 
       <div class="row">
         <div id="leftColumn" class="col-md-3">
-          <div class="hidden-xs hidden-sm hidden-md graphicBox">
+          <div class="hidden-xs hidden-sm  graphicBox">
             <h1><img id="graphicBox" src="Img/kremlin8bit.png"  alt="" /></h1>
           </div>
         </div>
         <div id="centerColumn" class="col-md-4 col-md-offset-1">
+          <div class="visible-xs scoreBoard"> scoreBoard
+          </div>
           <div class="gameBoard">
             <canvas id="gameCanvas" width="350" height="700"></canvas>
             <button id="button1" class="btn btn-success" type="button" name="button">Start Game</button>
@@ -30,9 +31,9 @@
           </div>
         </div>
         <div id="rightColumn" class="col-md-3 col-md-offset-1">
-          <div class="scoreBoard"> scoreBoard
+          <div class="hidden-xs hidden-sm scoreBoard"> scoreBoard
           </div>
-          <div class="lines"> Lines Removed:
+          <div class="hidden-xs hidden-sm lines"> Lines Removed:
             <div class="linesRemoved">
 
             </div>
@@ -40,7 +41,6 @@
           <div class="hidden-xs hidden-sm nextPiece">Next Piece
           </div>
           <div class="hidden-xs hidden-sm currentLevel">Current Level
-
           </div>
         </div>
       </div>

@@ -10,13 +10,8 @@ body {
 
 }
 
-/*body url {
-  margin-top: 200px;
-}*/
-
 canvas {
   /*border: 1px solid lightblue;*/
-
 }
 
 .jumbotron {
@@ -29,11 +24,13 @@ canvas {
 
 #button1 {
   background-color: black;
+  margin-top: 12px;
   margin-bottom: 12px;
   font-size: 12px;
 }
 #button2 {
   background-color: black;
+  margin-top: 12px;
   margin-bottom: 12px;
   font-size: 12px;
 }
@@ -71,6 +68,7 @@ margin-left: 65px;
     width: 300px;
     height: 100px;
     border: 3px solid red;
+    margin-top: 10px;
     margin: 2px;
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2ab0ed+34,bae5f2+97,e4f5fc+100 */
 background: rgb(42,176,237); /* Old browsers */
@@ -84,6 +82,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2ab0ed', end
     width: 300px;
     height: 300px;
     border: 3px solid red;
+    margin-top: 10px;
     margin: 2px;
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2ab0ed+34,bae5f2+97,e4f5fc+100 */
 background: rgb(42,176,237); /* Old browsers */
@@ -96,8 +95,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2ab0ed', end
 
   .currentLevel {
     width: 300px;
-    height: 300px;
+    height: 150px;
     border: 3px solid red;
+    margin-top: 10px;
     margin: 2px;
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2ab0ed+34,bae5f2+97,e4f5fc+100 */
 background: rgb(42,176,237); /* Old browsers */
@@ -116,7 +116,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2ab0ed', end
   }
 
   .container {
-    height: 900px;
+    height: auto;
     max-width: 1500px;
 
   }

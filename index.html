@@ -9,7 +9,7 @@
     <title>Textris</title>
   </head>
   <body>
-    <div class="container-fluid">
+    <div class="container">
       <div class="jumbotron">
         <img class="hidden-xs hidden-sm  img-fluid" src="Img/tetrisLogo2.png" height="200px" width="700px" alt="Responsive image" />
         <img class="visible-xs visible-sm img-fluid" src="Img/tetrisLogo2.png" height="200px" width="auto" alt="Responsive image" />
@@ -17,19 +17,19 @@
       </div>
 
       <div class="row">
-        <div id="leftColumn" class="col col-md-4">
+        <div id="leftColumn" class="col-md-3">
           <div class="hidden-xs hidden-sm hidden-md graphicBox">
             <h1><img id="graphicBox" src="Img/kremlin8bit.png"  alt="" /></h1>
           </div>
         </div>
-        <div id="centerColumn" class="col col-md-4">
+        <div id="centerColumn" class="col-md-4 col-md-offset-1">
           <div class="gameBoard">
             <canvas id="gameCanvas" width="350" height="700"></canvas>
             <button id="button1" class="btn btn-success" type="button" name="button">Start Game</button>
             <button id="button2" class="btn btn-warning" type="button" name="button">Reset Game</button>
           </div>
         </div>
-        <div id="rightColumn" class="col col-md-4">
+        <div id="rightColumn" class="col-md-3 col-md-offset-1">
           <div class="scoreBoard"> scoreBoard
           </div>
           <div class="lines"> Lines Removed:

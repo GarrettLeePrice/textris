@@ -46,7 +46,7 @@ Board.prototype.findFullRows = function() {
     this.removeRow(i);
   }
   this.addToScore(linesToClear);
-  console.log(this.score);
+  // console.log(this.score);
 };
 
 Board.prototype.addToScore = function(lines) {
@@ -58,17 +58,29 @@ Board.prototype.addToScore = function(lines) {
 }
 
 Board.prototype.lowerCurrentPiece = function() {
-  if (this.isBottomClear()) {
-    this.clearCurrentPieceLocation();
-    this.currentPiece.location[0]++;
+  var newLocation = [this.currentPiece.location[0] + 1, this.currentPiece.location[1]]
+  if (this.checkSpace(newLocation)) {
+    this.currentPiece.location = newLocation;
     this.populateCurrentPiece();
   } else {
     this.checkLoseCondition();
+    this.populateCurrentPiece();
     this.findFullRows();
     this.currentPiece = this.nextPiece;
     this.nextPiece = this.getNewPiece();
     this.populateCurrentPiece();
   }
+  // if (this.isBottomClear()) {
+  //   this.clearCurrentPieceLocation();
+  //   this.currentPiece.location[0]++;
+  //   this.populateCurrentPiece();
+  // } else {
+  //   this.checkLoseCondition();
+  //   this.findFullRows();
+  //   this.currentPiece = this.nextPiece;
+  //   this.nextPiece = this.getNewPiece();
+  //   this.populateCurrentPiece();
+  // }
 };
 
 Board.prototype.isBottomClear = function() {
@@ -86,11 +98,16 @@ Board.prototype.isBottomClear = function() {
 };
 
 Board.prototype.rightCurrentPiece = function() {
-  if (this.isRightClear()) {
-    this.clearCurrentPieceLocation();
-    this.currentPiece.location[1]++;
+  var newLocation = [this.currentPiece.location[0], this.currentPiece.location[1] + 1];
+  if (this.checkSpace(newLocation)) {
+    this.currentPiece.location = newLocation;
     this.populateCurrentPiece();
   }
+  // if (this.isRightClear()) {
+  //   this.clearCurrentPieceLocation();
+  //   this.currentPiece.location[1]++;
+  //   this.populateCurrentPiece();
+  // }
 };
 
 Board.prototype.isRightClear = function() {
@@ -109,11 +126,16 @@ Board.prototype.isRightClear = function() {
 }
 
 Board.prototype.leftCurrentPiece = function() {
-  if (this.isLeftClear()) {
-    this.clearCurrentPieceLocation();
-    this.currentPiece.location[1]--;
+  var newLocation = [this.currentPiece.location[0], this.currentPiece.location[1] - 1];
+  if (this.checkSpace(newLocation)) {
+    this.currentPiece.location = newLocation;
     this.populateCurrentPiece();
   }
+  // if (this.isLeftClear()) {
+  //   this.clearCurrentPieceLocation();
+  //   this.currentPiece.location[1]--;
+  //   this.populateCurrentPiece();
+  // }
 };
 
 Board.prototype.isLeftClear = function() {
@@ -138,6 +160,18 @@ Board.prototype.clearCurrentPieceLocation = function() {
     }
   }
 }
+
+Board.prototype.checkSpace = function(newLocation) {
+  this.clearCurrentPieceLocation();
+  for (i = 0; i < this.currentPiece.occupies.length; i++) {
+    var row = newLocation[0] + this.currentPiece.occupies[i][0];
+    var column = newLocation[1] + this.currentPiece.occupies[i][1];
+    if (row >= 20 || row < 0 || column >= 10 || column < 0 || this.rows[row][column] !== "O") {
+      return false;
+    }
+  }
+  return true;
+};
 
 Board.prototype.populateCurrentPiece = function() {
   for (i = 0; i < this.currentPiece.occupies.length; i++) {

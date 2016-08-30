@@ -1,11 +1,12 @@
 body {
-  font-family: "Courier New", Courier, monospace;
-  font-size: 26px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 15px;
   text-align: center;
   background-image: url("../Img/tetrisBackground2.jpg");
   background-repeat: no-repeat;
   background-position: bottom;
   background-color: black;
+  margin-top: 20px;
 
 }
 
@@ -14,7 +15,7 @@ body {
 }*/
 
 canvas {
-  border: 1px solid lightblue;
+  /*border: 1px solid lightblue;*/
 
 }
 
@@ -24,18 +25,17 @@ canvas {
   font-size: 20pt;
   /*background-image: url("../Img/tetrisLogo.jpg");*/
   background-image: url("../Img/tetrisBackground.jpg");
-
 }
 
 #button1 {
   background-color: black;
-  margin-bottom: 20px;
-  font-size: 20px;
+  margin-bottom: 12px;
+  font-size: 12px;
 }
 #button2 {
   background-color: black;
-  margin-bottom: 20px;
-  font-size: 20px;
+  margin-bottom: 12px;
+  font-size: 12px;
 }
 
 .gameBoard {

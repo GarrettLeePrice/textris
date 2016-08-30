@@ -5,12 +5,14 @@
     <link href="css/styles.css" type="text/css" rel="stylesheet">
     <script src="js/jquery-3.1.0.js"></script>
     <script src="js/scripts.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <title>Textris</title>
   </head>
   <body>
     <div class="container-fluid">
       <div class="jumbotron">
-        <h1><img src="Img/tetrisLogo2.png" height="200px" width="800px" alt="" /></h1>
+        <img class="hidden-xs hidden-sm  img-fluid" src="Img/tetrisLogo2.png" height="200px" width="700px" alt="Responsive image" />
+        <img class="visible-xs visible-sm img-fluid" src="Img/tetrisLogo2.png" height="200px" width="auto" alt="Responsive image" />
 
       </div>
 
@@ -26,12 +28,6 @@
             <button id="button1" class="btn btn-success" type="button" name="button">Start Game</button>
             <button id="button2" class="btn btn-warning" type="button" name="button">Reset Game</button>
           </div>
-          <!-- <div id="button1" class="btn btn-success">
-            Start Game
-          </div>
-          <div id="button2" class="btn btn-warning">
-            Reset Game
-          </div> -->
         </div>
         <div id="rightColumn" class="col col-md-4">
           <div class="scoreBoard"> scoreBoard

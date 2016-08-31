@@ -1,75 +1,70 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link href="css/bootstrap.css" type="text/css" rel="stylesheet">
-    <link href="css/styles.css" type="text/css" rel="stylesheet">
-    <script src="js/jquery-3.1.0.js"></script>
-    <script src="js/scripts.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    <title>Textris</title>
-  </head>
-  <body>
-    <div class="container">
-      <div id="jumbotron" class="jumbotron ">
-        <img class="hidden-xs hidden-sm  img-fluid" src="Img/tetrisLogo2.png" height="200px" width="700px" alt="Responsive image" />
-        <img class="visible-xs visible-sm img-fluid" src="Img/tetrisLogo2.png" height="200px" width="auto" alt="Responsive image" />
+<head>
+  <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="css/styles.css" rel="stylesheet" type="text/css">
+  <script src="js/jquery-3.1.0.js">
+  </script>
+  <script src="js/scripts.js">
+  </script>
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel=
+  "stylesheet">
+  <title>Textris</title>
+</head>
+<body>
+  <div class="container">
+    <div class="jumbotron" id="jumbotron"><img alt="Responsive image" class=
+    "hidden-xs hidden-sm img-fluid" height="200px" src="Img/tetrisLogo2.png"
+    width="700px"> <img alt="Responsive image" class=
+    "visible-xs visible-sm img-fluid" height="200px" src="Img/tetrisLogo2.png"
+    width="auto"></div>
+    <div class="row">
+      <div class="col-md-3" id="leftColumn">
+        <div class="hidden-xs hidden-sm graphicBox">
+          <h1><img alt="" id="graphicBox" src="Img/kremlin8bit.png"></h1>
+        </div>
+        <div class="hidden-xs hidden-sm controlerBox">
+          <h5>Controls:</h5>
+          <p>arrowUP: rotate right. key(A): rotate left. arrowLEFT: shift left.
+          arrowRIGHT: shift right. arrowDOWN: drop faster. Enter: pause.</p>
+        </div>
       </div>
-
-      <div class="row">
-        <div id="leftColumn" class="col-md-3">
-          <div class="hidden-xs hidden-sm  graphicBox">
-            <h1><img id="graphicBox" src="Img/kremlin8bit.png"  alt="" /></h1>
-          </div>
-          <div class="hidden-xs hidden-sm controlerBox"><h5>Controls:</h5>
-            <p>
-              arrowUP:    rotate right.
-              key(A):     rotate left.
-              arrowLEFT:  shift left.
-              arrowRIGHT: shift right.
-              arrowDOWN:  drop faster.
-            </p>
-          </div>
+      <div class="col-md-4 col-md-offset-1" id="centerColumn">
+        <div class="visible-xs scoreBoard" id="mobileScoreBoard">
+          Score
+          <div class="score"></div>
         </div>
-        <div id="centerColumn" class="col-md-4 col-md-offset-1">
-          <div id="mobileScoreBoard" class="visible-xs scoreBoard">Score
-            <div class="score">
-            </div>
-          </div>
-            <div id="mobileLevel" class="visible-xs currentLevel">Level
-              <div class="level">
-              </div>
-          </div>
-          <div class="gameBoard">
-            <canvas id="gameCanvas" height="700" width="350"></canvas>
-
-
-            <button id="button1" class="btn btn-success bottom" type="button" name="button">Start Game</button>
-
-            <button id="button2" class="btn btn-warning bottom" type="button" name="button">Reset Game</button>
-          </div>
+        <div class="visible-xs currentLevel" id="mobileLevel">
+          Level
+          <div class="level"></div>
         </div>
-        <div id="rightColumn" class="col-md-3 col-md-offset-1">
-          <div class="hidden-xs hidden-sm scoreBoard "> Score:
-            <div class="score">
-
-            </div>
-          </div>
-          <div class="hidden-xs hidden-sm lines"> Lines Removed:
-            <div class="linesRemoved">
-
-            </div>
-          </div>
-          <div class="hidden-xs hidden-sm nextPiece">Next Piece
-            <canvas id="nextPieceCanvas" width="140" height="140"></canvas>
-          </div>
-          <div class="hidden-xs hidden-sm currentLevel">Level:
-            <div class="level">
-
-            </div>
-
-          </div>
+        <div class="gameBoard">
+          <canvas height="700" id="gameCanvas" width="350">
+          </canvas><button class="btn btn-success bottom" id="button1" name=
+          "button" type="button">Start Game</button> <button class=
+          "btn btn-warning bottom" id="button2" name="button" type=
+          "button">Reset Game</button>
+        </div>
+      </div>
+      <div class="col-md-3 col-md-offset-1" id="rightColumn">
+        <div class="hidden-xs hidden-sm scoreBoard">
+          Score:
+          <div class="score"></div>
+        </div>
+        <div class="hidden-xs hidden-sm lines">
+          Lines Removed:
+          <div class="linesRemoved"></div>
+        </div>
+        <div class="hidden-xs hidden-sm nextPiece">
+          Next Piece
+          <canvas height="140" id="nextPieceCanvas" width="140"></canvas>
+        </div>
+        <div class="hidden-xs hidden-sm currentLevel">
+          Level:
+          <div class="level"></div>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+</body>
 </html>

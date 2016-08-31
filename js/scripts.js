@@ -11,10 +11,6 @@ function Board() {
   this.paused = false;
 };
 
-Board.prototype.recordScore = function() {
-  document.cookie = "highscores=test";
-};
-
 Board.prototype.trackLevel = function() {
   this.level = Math.floor(this.lines / 10);
 };
@@ -617,7 +613,7 @@ $(document).ready(function() {
         board.lowerCurrentPiece();
     } else if (key === 38 || key === 83) {
         board.rotatePiece();
-    } else if (key === 13) {
+    } else if (key === 65) {
         board.reverseRotate();
     }
   });

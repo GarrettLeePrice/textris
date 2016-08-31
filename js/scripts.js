@@ -8,6 +8,7 @@ function Board() {
   this.score = 0;
   this.level = 0;
   this.trackTetris = false;
+  this.paused = false;
 };
 
 Board.prototype.trackLevel = function() {
@@ -71,6 +72,9 @@ Board.prototype.addToScore = function(lines) {
 }
 
 Board.prototype.lowerCurrentPiece = function() {
+  if (this.paused) {
+    return;
+  }
   var newLocation = [this.currentPiece.location[0] + 1, this.currentPiece.location[1]]
   if (this.checkSpace(newLocation)) {
     this.clearCurrentPieceLocation();
@@ -446,6 +450,16 @@ Pieces.prototype.setToLine = function() {
 Board.prototype.drawCanvas = function(context, canvas) {
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.beginPath();
+  if (this.paused) {
+    context.font = "30px Arial";
+    context.fillStyle = "white";
+    context.fillText("Paused", 0, 50);
+    context.fillStyle = "black";
+    context.stroke()
+    context.closePath();
+    return;
+  }
+
   var squareWidth = canvas.width / 10;
   var currentRow = 0;
   var currentColumn = 0;
@@ -470,6 +484,9 @@ Board.prototype.drawCanvas = function(context, canvas) {
 
 Board.prototype.drawPieceCanvas = function(context, canvas) {
   context.clearRect(0, 0, canvas.width, canvas.height);
+  if (this.paused) {
+    return;
+  }
   context.beginPath();
   var squareWidth = canvas.width / 4;
   var currentRow = 0;
@@ -565,35 +582,29 @@ $(document).ready(function() {
   }
 
   $(document).keydown(function(event) {
-    if (stop) {
-      return;
-    }
     var key = event.which;
     console.log(key);
+    if (key === 13) {
+      board.paused = !board.paused;
+      return;
+    }
+    if (stop || board.loss || board.paused) {
+      return;
+    }
     if (key === 37) {
-      if (board.loss === false) {
         left = true;
         timePassed = 0;
         board.leftCurrentPiece();
-      }
     } else if (key === 39) {
-      if (board.loss === false) {
         right = true;
         timePassed = 0;
         board.rightCurrentPiece();
-      }
     } else if (key === 40) {
-      if (board.loss === false) {
         board.lowerCurrentPiece();
-      }
     } else if (key === 38 || key === 83) {
-      if (board.loss === false) {
         board.rotatePiece();
-      }
-    } else if (key === 65) {
-      if (board.loss === false) {
+    } else if (key === 13) {
         board.reverseRotate();
-      }
     }
   });
 

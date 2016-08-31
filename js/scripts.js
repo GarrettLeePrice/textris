@@ -531,7 +531,15 @@ $(document).ready(function() {
       right = false;
     }
   })
-
+  $(window).resize(function() {
+    if ($(window).width() < 768) {
+      $("#gameCanvas").attr("width", "250");
+      $("#gameCanvas").attr("height", "500");
+    } else {
+      $("#gameCanvas").attr("width", "350");
+      $("#gameCanvas").attr("height", "700");
+    }
+  })
   var audio = new Audio('Audio/tetris.mp3');
   $("#button1").click(function(){
     startGame();

@@ -22,14 +22,20 @@
           </div>
         </div>
         <div id="centerColumn" class="col-md-4 col-md-offset-1">
-          <div class="visible-xs scoreBoard"> scoreBoard
+          <div id="mobileScoreBoard" class="visible-xs scoreBoard">Score
             <div class="score">
-
             </div>
           </div>
+            <div id="mobileLevel" class="visible-xs currentLevel">Level
+              <div class="level">
+              </div>
+          </div>
           <div class="gameBoard">
-            <canvas id="gameCanvas" width="350" height="700"></canvas>
+            <canvas id="gameCanvas" height="700" width="350"></canvas>
+
+
             <button id="button1" class="btn btn-success" type="button" name="button">Start Game</button>
+
             <button id="button2" class="btn btn-warning" type="button" name="button">Reset Game</button>
           </div>
         </div>

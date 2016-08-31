@@ -6,9 +6,6 @@
 }*/
 
 
-
-
-
 body {
   font-family: 'Press Start 2P', cursive;
   font-size: 15px;
@@ -18,12 +15,17 @@ body {
   background-position: bottom;
   background-color: black;
   margin-top: 20px;
-
 }
 
-#gameCanvas {
-  border: 1px solid lightblue;
-}
+/*.mobileGameCanvas {
+  width:275px;
+  height:550px;
+}*/
+
+/*.regularGameCanvas {
+  width: 300px;
+  height: 600px;
+}*/
 
 .jumbotron {
   text-align: center;
@@ -34,28 +36,12 @@ body {
   border: 1px solid lightblue;
 }
 
-#button1 {
-  background-color: black;
-  margin-top: 12px;
-  margin-bottom: 12px;
-  font-size: 12px;
-}
-#button2 {
-  background-color: black;
-  margin-top: 12px;
-  margin-bottom: 12px;
-  font-size: 12px;
-}
-
 .gameBoard {
-  background-color: black;
-
+  /*background-color: black;*/
     width: 372px;
     height: 722px;
     margin-bottom: 0px;
-    border: 10px solid red;
     float: none;
-
   }
 
   .lines {
@@ -71,10 +57,7 @@ body {
 
     }
 
-#rightColumn {
-margin-left: 65px;
 
-}
 .scoreBoard {
     width: 300px;
     height: 100px;
@@ -99,7 +82,6 @@ margin-left: 65px;
     background: -webkit-linear-gradient(top,  rgba(42,176,237,1) 34%,rgba(186,229,242,1) 97%,rgba(228,245,252,1) 100%);
     background: linear-gradient(to bottom,  rgba(42,176,237,1) 34%,rgba(186,229,242,1) 97%,rgba(228,245,252,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2ab0ed', endColorstr='#e4f5fc',GradientType=0 );
-
   }
 
   .currentLevel {
@@ -113,18 +95,52 @@ margin-left: 65px;
     background: -webkit-linear-gradient(top,  rgba(42,176,237,1) 34%,rgba(186,229,242,1) 97%,rgba(228,245,252,1) 100%);
     background: linear-gradient(to bottom,  rgba(42,176,237,1) 34%,rgba(186,229,242,1) 97%,rgba(228,245,252,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2ab0ed', endColorstr='#e4f5fc',GradientType=0 );
+  }
 
+  .container {
+    height: auto;
+    max-width: 1500px;
+  }
+
+  #mobileScoreBoard {
+    width:150px;
+    height:50px;
+    float: left;
+  }
+
+  #mobileLevel {
+    width:150px;
+    height:50px;
+    float: right;
+  }
+
+  #gameCanvas {
+    border: 1px solid lightblue;
+    background-color: black;
+      margin-bottom: 0px;
+      border: 10px solid blue;
+      float: none;
+  }
+
+  #button1 {
+    background-color: black;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+  #button2 {
+    background-color: black;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+
+  #rightColumn {
+  margin-left: 65px;
   }
 
   #graphicBox {
     width: 300px;
     height: 650px;
     border: 3px solid red;
-
-  }
-
-  .container {
-    height: auto;
-    max-width: 1500px;
-
   }

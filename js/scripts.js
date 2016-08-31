@@ -14,7 +14,7 @@ Board.prototype.trackLevel = function() {
 };
 
 Board.prototype.buildBoard = function() {
-  for (var i = 0; i < 20; i++) {
+  for (var i = 0; i < 24; i++) {
     var row = [];
     for(j = 0; j < 10; j++) {
       row.push("O");
@@ -36,7 +36,7 @@ Board.prototype.removeRow = function(row) {
 
 Board.prototype.findFullRows = function() {
   var linesToClear = 0;
-  for (var i = 0; i < 20; i++) {
+  for (var i = 0; i < 24; i++) {
     var test = true;
     for (j = 0; j < 10; j++) {
       if (this.rows[i][j] === "O") {
@@ -126,9 +126,10 @@ Board.prototype.checkSpace = function(newLocation) {
   for (var i = 0; i < this.currentPiece.occupies.length; i++) {
     var row = newLocation[0] + this.currentPiece.occupies[i][0];
     var column = newLocation[1] + this.currentPiece.occupies[i][1];
-    if (row >= 20 || column >= 10 || column < 0) {
+    if (row >= 24 || column >= 10 || column < 0) {
       return false;
     }
+    // debugger;
     if (this.rows[row][column] !== "O") {
       if (!this.partOfCurrentPiece([row, column])) {
         return false;
@@ -284,7 +285,7 @@ Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj
       return false;
     } else if (column < 0) {
       return false;
-    } else if (row > 19) {
+    } else if (row > 23) {
       return false;
     } else if (! row < 0 && parentObj.rows[row][column] !== "O") {
       return false;
@@ -319,7 +320,7 @@ Board.prototype.checkLoseCondition = function() {
 
 // Pieces object starts here
 function Pieces() {
-  this.location = [-1, 4];
+  this.location = [2, 4];
   this.occupies = [];
   this.pieceType;
   this.possibleSpaces = [[1,-1], [1,0], [1,1], [0,-1], [0,0], [0,1], [-1,-1], [-1,0], [-1,1], [1,2], [-2,0]];
@@ -393,7 +394,7 @@ Board.prototype.drawCanvas = function(context, canvas) {
   var currentColumn = 0;
   // context.rect(currentColumn, currentRow, squareWidth, squareWidth);
 
-  for (var i = 0; i < 20; i++) {
+  for (var i = 4; i < 24; i++) {
     for (j = 0; j < 10; j++) {
       if (this.rows[i][j] !== "O") {
         context.fillStyle=this.rows[i][j];
@@ -452,7 +453,6 @@ $(document).ready(function() {
     $(".score").text(board.score);
     $(".level").text(board.level);
 
-    // debugger;
     counter = 600 - (board.level * 50);
     if (counter < 100) {
       counter = 100;

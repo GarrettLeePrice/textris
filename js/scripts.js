@@ -11,6 +11,10 @@ function Board() {
   this.paused = false;
 };
 
+Board.prototype.recordScore = function() {
+  document.cookie = "highscores=test";
+};
+
 Board.prototype.trackLevel = function() {
   this.level = Math.floor(this.lines / 10);
 };
@@ -450,7 +454,15 @@ Pieces.prototype.setToLine = function() {
 Board.prototype.drawCanvas = function(context, canvas) {
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.beginPath();
-  if (this.paused) {
+  if (this.loss) {
+    var loseImage = new Image();
+    loseImage.src = "img/youLose.jpg";
+    loseImage.width = canvas.width;
+    context.drawImage(loseImage, 0, 0);
+    context.stroke();
+    context.closePath();
+    return;
+  } else if (this.paused) {
     context.font = "30px Arial";
     context.fillStyle = "white";
     context.fillText("Paused", 0, 50);
@@ -484,7 +496,9 @@ Board.prototype.drawCanvas = function(context, canvas) {
 
 Board.prototype.drawPieceCanvas = function(context, canvas) {
   context.clearRect(0, 0, canvas.width, canvas.height);
-  if (this.paused) {
+  if (this.loss) {
+    return;
+  } else if (this.paused) {
     return;
   }
   context.beginPath();
@@ -616,27 +630,6 @@ $(document).ready(function() {
       right = false;
     }
   })
-  $(window).resize(function() {
-    if ($(window).width()< 768) {
-      $("#gameCanvas").attr("width", "250");
-      $("#gameCanvas").attr("height", "500");
-    } else {
-      $("#gameCanvas").attr("width", "350");
-      $("#gameCanvas").attr("height", "700");
-    }
-  });
-  $(window).resize(function() {
-    if ($(window).height() < 768) {
-      $(".jumbotron").addClass("hidden");
-      $("#gameCanvas").attr("width", "250");
-      $("#gameCanvas").attr("height", "500");
-    } else {
-      $(".jumbotron").removeClass("hidden");
-      $("#gameCanvas").attr("width", "350");
-      $("#gameCanvas").attr("height", "700");
-    }
-  });
-
 
   var audio = new Audio('Audio/tetris.mp3');
   $("#button1").click(function(){

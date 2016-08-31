@@ -95,11 +95,6 @@ Board.prototype.leftCurrentPiece = function() {
     this.currentPiece.location = newLocation;
     this.populateCurrentPiece();
   }
-  // if (this.isLeftClear()) {
-  //   this.clearCurrentPieceLocation();
-  //   this.currentPiece.location[1]--;
-  //   this.populateCurrentPiece();
-  // }
 };
 
 Board.prototype.clearCurrentPieceLocation = function() {
@@ -415,6 +410,26 @@ Board.prototype.drawCanvas = function(context, canvas) {
   context.closePath();
 };
 
+Board.prototype.drawPieceCanvas = function(context, canvas) {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.beginPath();
+  var squareWidth = canvas.width / 4;
+  var currentRow = 0;
+  var currentColumn = 0;
+  var middle = [squareWidth, squareWidth * 2];
+  for (var i = 0; i < this.nextPiece.occupies.length; i++) {
+    currentColumn = middle[0] + (this.nextPiece.occupies[i][1] * squareWidth);
+    currentRow = middle[1] + (this.nextPiece.occupies[i][0] * squareWidth);
+    context.fillStyle = this.nextPiece.color;
+    context.fillRect(currentColumn, currentRow, squareWidth, squareWidth);
+    context.fillStyle = "black";
+    context.strokeRect(currentColumn, currentRow, squareWidth, squareWidth);
+  }
+  context.stroke();
+  context.closePath();
+
+};
+
 var board = new Board();
 
 $(document).ready(function() {
@@ -426,8 +441,10 @@ $(document).ready(function() {
   var counter = 600;
   var interval;
   var stop = true;
-  var mainCanvas = document.getElementById("gameCanvas");;
+  var mainCanvas = document.getElementById("gameCanvas");
   var mainContext = mainCanvas.getContext("2d");
+  var pieceCanvas = document.getElementById("nextPieceCanvas");
+  var pieceContext = pieceCanvas.getContext("2d");
   var runGame = function() {
     clearInterval(interval);
     board.lowerCurrentPiece();
@@ -470,6 +487,7 @@ $(document).ready(function() {
     timePassed += now - then;
     then = now;
     board.drawCanvas(mainContext, mainCanvas);
+    board.drawPieceCanvas(pieceContext, pieceCanvas);
     if (left && timePassed > 250) {
       board.leftCurrentPiece();
       timePassed = 0;

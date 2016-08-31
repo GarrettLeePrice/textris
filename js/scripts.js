@@ -459,10 +459,16 @@ $(document).ready(function() {
     $(".score").text(board.score);
     $(".level").text(board.level);
 
-    counter = 600 - (board.level * 50);
-    if (counter < 100) {
-      counter = 100;
+    var timeSubtraction = 600;
+    for (i = 1; i < board.level; i++) {
+      if (i < 9) {
+        timeSubtraction = timeSubtraction - 60;
+      } else {
+        timeSubtraction = timeSubtraction - (timeSubtraction * .15);
+      }
     }
+
+    counter = timeSubtraction;
 
     processGame();
     if (board.loss === true) {
@@ -505,6 +511,9 @@ $(document).ready(function() {
   }
 
   $(document).keydown(function(event) {
+    if (stop) {
+      return;
+    }
     var key = event.which;
     if (key === 37) {
       if (board.loss === false) {

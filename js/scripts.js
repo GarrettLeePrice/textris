@@ -7,6 +7,8 @@ function Board() {
   this.loss = false;
   this.score = 0;
   this.level = 0;
+  this.trackTetris = false;
+  this.paused = false;
 };
 
 Board.prototype.trackLevel = function() {
@@ -14,7 +16,7 @@ Board.prototype.trackLevel = function() {
 };
 
 Board.prototype.buildBoard = function() {
-  for (var i = 0; i < 20; i++) {
+  for (var i = 0; i < 24; i++) {
     var row = [];
     for(j = 0; j < 10; j++) {
       row.push("O");
@@ -36,7 +38,7 @@ Board.prototype.removeRow = function(row) {
 
 Board.prototype.findFullRows = function() {
   var linesToClear = 0;
-  for (var i = 0; i < 20; i++) {
+  for (var i = 0; i < 24; i++) {
     var test = true;
     for (j = 0; j < 10; j++) {
       if (this.rows[i][j] === "O") {
@@ -50,20 +52,29 @@ Board.prototype.findFullRows = function() {
     linesToClear++;
     this.removeRow(i);
   }
-  this.addToScore(linesToClear);
+  if (linesToClear !== 0) {
+    this.addToScore(linesToClear);
+  }
 };
 
 Board.prototype.addToScore = function(lines) {
-  if (lines === 4) {
+  if (lines === 4 && this.trackTetris) {
+    this.score += 1200
+  } else if (lines === 4) {
     this.score += 800;
+    this.trackTetris = true;
   } else {
     this.score += (lines * 100);
+    this.trackTetris = false;
   }
   this.trackLevel();
   console.log(this.level);
 }
 
 Board.prototype.lowerCurrentPiece = function() {
+  if (this.paused) {
+    return;
+  }
   var newLocation = [this.currentPiece.location[0] + 1, this.currentPiece.location[1]]
   if (this.checkSpace(newLocation)) {
     this.clearCurrentPieceLocation();
@@ -126,9 +137,10 @@ Board.prototype.checkSpace = function(newLocation) {
   for (var i = 0; i < this.currentPiece.occupies.length; i++) {
     var row = newLocation[0] + this.currentPiece.occupies[i][0];
     var column = newLocation[1] + this.currentPiece.occupies[i][1];
-    if (row >= 20 || column >= 10 || column < 0) {
+    if (row >= 24 || column >= 10 || column < 0) {
       return false;
     }
+    // debugger;
     if (this.rows[row][column] !== "O") {
       if (!this.partOfCurrentPiece([row, column])) {
         return false;
@@ -235,6 +247,60 @@ Board.prototype.rotateLine = function() {
   }
 };
 
+Board.prototype.reverseRotate = function() {
+  if (this.currentPiece.pieceType === "line") {
+    this.rotateLine();
+    return;
+  } else if (this.currentPiece.pieceType === "square") {
+    return;
+  }
+  var newSpacesOccupied = [];
+  for (var i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
+    switch (this.currentPiece.spacesOccupied[i]) {
+      case 1:
+        newSpacesOccupied.push(3)
+        break;
+      case 2:
+        newSpacesOccupied.push(6);
+        break;
+      case 3:
+        newSpacesOccupied.push(9)
+        break;
+      case 4:
+        newSpacesOccupied.push(2)
+        break;
+      case 5:
+        newSpacesOccupied.push(5)
+        break;
+      case 6:
+        newSpacesOccupied.push(8)
+        break;
+      case 7:
+        newSpacesOccupied.push(1)
+        break;
+      case 8:
+        newSpacesOccupied.push(4)
+        break;
+      case 9:
+        newSpacesOccupied.push(7)
+        break;
+    }
+  }
+  var testSpaces = [];
+  for (var i = 0; i < newSpacesOccupied.length; i++) {
+    var space = newSpacesOccupied[i]-1;
+    var row = this.currentPiece.location[0] + this.currentPiece.possibleSpaces[space][0];
+    var column = this.currentPiece.location[1] + this.currentPiece.possibleSpaces[space][1];
+    testSpaces.push([row, column]);
+  }
+  if (this.checkRotateSpace(testSpaces)) {
+    this.clearCurrentPieceLocation();
+    this.currentPiece.spacesOccupied = newSpacesOccupied;
+    this.currentPiece.setOccupies();
+    this.populateCurrentPiece();
+  }
+};
+
 Board.prototype.checkRotateSpace = function(coordinates) {
   for (var i = 0; i < coordinates.length; i++) {
     if (this.rows[coordinates[i][0]][coordinates[i][1]] !== "O") {
@@ -284,7 +350,7 @@ Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj
       return false;
     } else if (column < 0) {
       return false;
-    } else if (row > 19) {
+    } else if (row > 23) {
       return false;
     } else if (! row < 0 && parentObj.rows[row][column] !== "O") {
       return false;
@@ -302,24 +368,20 @@ Board.prototype.resetGame = function() {
   this.loss = false;
   this.score = 0;
   this.level = 0;
+  this.loss = false;
 };
 
 Board.prototype.checkLoseCondition = function() {
-  if (this.currentPiece.location[0] < 1) {
-    for (var i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
-      var row = this.currentPiece.location[0] + this.currentPiece.occupies[i][0];
-      if (row < 0) {
-        this.loss = true;
-        // alert("You lose");
-
-      }
+  for (var i = 0; i < this.rows[3].length; i++) {
+    if (this.rows[3][i] !== "O") {
+      this.loss = true;
     }
   }
 };
 
 // Pieces object starts here
 function Pieces() {
-  this.location = [-1, 4];
+  this.location = [2, 4];
   this.occupies = [];
   this.pieceType;
   this.possibleSpaces = [[1,-1], [1,0], [1,1], [0,-1], [0,0], [0,1], [-1,-1], [-1,0], [-1,1], [1,2], [-2,0]];
@@ -388,12 +450,22 @@ Pieces.prototype.setToLine = function() {
 Board.prototype.drawCanvas = function(context, canvas) {
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.beginPath();
+  if (this.paused) {
+    context.font = "30px Arial";
+    context.fillStyle = "white";
+    context.fillText("Paused", 0, 50);
+    context.fillStyle = "black";
+    context.stroke()
+    context.closePath();
+    return;
+  }
+
   var squareWidth = canvas.width / 10;
   var currentRow = 0;
   var currentColumn = 0;
   // context.rect(currentColumn, currentRow, squareWidth, squareWidth);
 
-  for (var i = 0; i < 20; i++) {
+  for (var i = 4; i < 24; i++) {
     for (j = 0; j < 10; j++) {
       if (this.rows[i][j] !== "O") {
         context.fillStyle=this.rows[i][j];
@@ -412,6 +484,9 @@ Board.prototype.drawCanvas = function(context, canvas) {
 
 Board.prototype.drawPieceCanvas = function(context, canvas) {
   context.clearRect(0, 0, canvas.width, canvas.height);
+  if (this.paused) {
+    return;
+  }
   context.beginPath();
   var squareWidth = canvas.width / 4;
   var currentRow = 0;
@@ -448,15 +523,23 @@ $(document).ready(function() {
   var runGame = function() {
     clearInterval(interval);
     board.lowerCurrentPiece();
+    if (board.loss === true) {
+      stop = true;
+    }
     $(".linesRemoved").text(board.lines);
     $(".score").text(board.score);
     $(".level").text(board.level);
 
-    // debugger;
-    counter = 600 - (board.level * 50);
-    if (counter < 100) {
-      counter = 100;
+    var timeSubtraction = 600;
+    for (i = 1; i < board.level; i++) {
+      if (i < 9) {
+        timeSubtraction = timeSubtraction - 60;
+      } else {
+        timeSubtraction = timeSubtraction - (timeSubtraction * .15);
+      }
     }
+
+    counter = timeSubtraction;
 
     processGame();
     if (board.loss === true) {
@@ -500,26 +583,28 @@ $(document).ready(function() {
 
   $(document).keydown(function(event) {
     var key = event.which;
+    console.log(key);
+    if (key === 13) {
+      board.paused = !board.paused;
+      return;
+    }
+    if (stop || board.loss || board.paused) {
+      return;
+    }
     if (key === 37) {
-      if (board.loss === false) {
         left = true;
         timePassed = 0;
         board.leftCurrentPiece();
-      }
     } else if (key === 39) {
-      if (board.loss === false) {
         right = true;
         timePassed = 0;
         board.rightCurrentPiece();
-      }
     } else if (key === 40) {
-      if (board.loss === false) {
         board.lowerCurrentPiece();
-      }
-    } else if (key === 38) {
-      if (board.loss === false) {
+    } else if (key === 38 || key === 83) {
         board.rotatePiece();
-      }
+    } else if (key === 13) {
+        board.reverseRotate();
     }
   });
 

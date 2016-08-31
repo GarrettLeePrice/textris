@@ -10,7 +10,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="jumbotron hidden-xs">
+      <div id="jumbotron" class="jumbotron ">
         <img class="hidden-xs hidden-sm  img-fluid" src="Img/tetrisLogo2.png" height="200px" width="700px" alt="Responsive image" />
         <img class="visible-xs visible-sm img-fluid" src="Img/tetrisLogo2.png" height="200px" width="auto" alt="Responsive image" />
       </div>
@@ -19,6 +19,15 @@
         <div id="leftColumn" class="col-md-3">
           <div class="hidden-xs hidden-sm  graphicBox">
             <h1><img id="graphicBox" src="Img/kremlin8bit.png"  alt="" /></h1>
+          </div>
+          <div class="hidden-xs hidden-sm controlerBox"><h5>Controls:</h5>
+            <p>
+              arrowUP:    rotate right.
+              key(A):     rotate left.
+              arrowLEFT:  shift left.
+              arrowRIGHT: shift right.
+              arrowDOWN:  drop faster.
+            </p>
           </div>
         </div>
         <div id="centerColumn" class="col-md-4 col-md-offset-1">
@@ -34,9 +43,9 @@
             <canvas id="gameCanvas" height="700" width="350"></canvas>
 
 
-            <button id="button1" class="btn btn-success" type="button" name="button">Start Game</button>
+            <button id="button1" class="btn btn-success bottom" type="button" name="button">Start Game</button>
 
-            <button id="button2" class="btn btn-warning" type="button" name="button">Reset Game</button>
+            <button id="button2" class="btn btn-warning bottom" type="button" name="button">Reset Game</button>
           </div>
         </div>
         <div id="rightColumn" class="col-md-3 col-md-offset-1">

@@ -17,6 +17,10 @@ body {
   margin-top: 20px;
 }
 
+h5 {
+  text-align: center;
+}
+
 /*.mobileGameCanvas {
   width:275px;
   height:550px;
@@ -37,11 +41,7 @@ body {
 }
 
 .gameBoard {
-  /*background-color: black;*/
-    width: 372px;
-    height: 722px;
-    margin-bottom: 0px;
-    float: none;
+
   }
 
   .lines {
@@ -102,6 +102,22 @@ body {
     max-width: 1500px;
   }
 
+  .controlerBox {
+      text-align: left;
+      font-size: 12px;
+      width: 300px;
+      height: 150px;
+      border: 3px solid red;
+      margin-top: 10px;
+      margin: 2px;
+      background: rgb(42,176,237);
+      background: -moz-linear-gradient(top,  rgba(42,176,237,1) 34%, rgba(186,229,242,1) 97%, rgba(228,245,252,1) 100%); /* FF3.6-15 */
+      background: -webkit-linear-gradient(top,  rgba(42,176,237,1) 34%,rgba(186,229,242,1) 97%,rgba(228,245,252,1) 100%);
+      background: linear-gradient(to bottom,  rgba(42,176,237,1) 34%,rgba(186,229,242,1) 97%,rgba(228,245,252,1) 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2ab0ed', endColorstr='#e4f5fc',GradientType=0 );
+    }
+
+
   #mobileScoreBoard {
     width:150px;
     height:50px;
@@ -119,19 +135,18 @@ body {
     background-color: black;
       margin-bottom: 0px;
       border: 10px solid blue;
-      float: none;
   }
 
   #button1 {
     background-color: black;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    /*margin-top: 12px;
+    margin-bottom: 12px;*/
     font-size: 12px;
   }
   #button2 {
     background-color: black;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    /*margin-top: 12px;
+    margin-bottom: 12px;*/
     font-size: 12px;
   }
 
@@ -141,6 +156,7 @@ body {
 
   #graphicBox {
     width: 300px;
-    height: 650px;
+    height: 500px;
     border: 3px solid red;
+    margin-top: -20px;
   }

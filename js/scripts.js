@@ -243,6 +243,60 @@ Board.prototype.rotateLine = function() {
   }
 };
 
+Board.prototype.reverseRotate = function() {
+  if (this.currentPiece.pieceType === "line") {
+    this.rotateLine();
+    return;
+  } else if (this.currentPiece.pieceType === "square") {
+    return;
+  }
+  var newSpacesOccupied = [];
+  for (var i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
+    switch (this.currentPiece.spacesOccupied[i]) {
+      case 1:
+        newSpacesOccupied.push(3)
+        break;
+      case 2:
+        newSpacesOccupied.push(6);
+        break;
+      case 3:
+        newSpacesOccupied.push(9)
+        break;
+      case 4:
+        newSpacesOccupied.push(2)
+        break;
+      case 5:
+        newSpacesOccupied.push(5)
+        break;
+      case 6:
+        newSpacesOccupied.push(8)
+        break;
+      case 7:
+        newSpacesOccupied.push(1)
+        break;
+      case 8:
+        newSpacesOccupied.push(4)
+        break;
+      case 9:
+        newSpacesOccupied.push(7)
+        break;
+    }
+  }
+  var testSpaces = [];
+  for (var i = 0; i < newSpacesOccupied.length; i++) {
+    var space = newSpacesOccupied[i]-1;
+    var row = this.currentPiece.location[0] + this.currentPiece.possibleSpaces[space][0];
+    var column = this.currentPiece.location[1] + this.currentPiece.possibleSpaces[space][1];
+    testSpaces.push([row, column]);
+  }
+  if (this.checkRotateSpace(testSpaces)) {
+    this.clearCurrentPieceLocation();
+    this.currentPiece.spacesOccupied = newSpacesOccupied;
+    this.currentPiece.setOccupies();
+    this.populateCurrentPiece();
+  }
+};
+
 Board.prototype.checkRotateSpace = function(coordinates) {
   for (var i = 0; i < coordinates.length; i++) {
     if (this.rows[coordinates[i][0]][coordinates[i][1]] !== "O") {
@@ -515,6 +569,7 @@ $(document).ready(function() {
       return;
     }
     var key = event.which;
+    console.log(key);
     if (key === 37) {
       if (board.loss === false) {
         left = true;
@@ -531,9 +586,13 @@ $(document).ready(function() {
       if (board.loss === false) {
         board.lowerCurrentPiece();
       }
-    } else if (key === 38) {
+    } else if (key === 38 || key === 83) {
       if (board.loss === false) {
         board.rotatePiece();
+      }
+    } else if (key === 65) {
+      if (board.loss === false) {
+        board.reverseRotate();
       }
     }
   });

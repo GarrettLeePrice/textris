@@ -7,6 +7,7 @@ function Board() {
   this.loss = false;
   this.score = 0;
   this.level = 0;
+  this.trackTetris = false;
 };
 
 Board.prototype.trackLevel = function() {
@@ -50,14 +51,20 @@ Board.prototype.findFullRows = function() {
     linesToClear++;
     this.removeRow(i);
   }
-  this.addToScore(linesToClear);
+  if (linesToClear !== 0) {
+    this.addToScore(linesToClear);
+  }
 };
 
 Board.prototype.addToScore = function(lines) {
-  if (lines === 4) {
+  if (lines === 4 && this.trackTetris) {
+    this.score += 1200
+  } else if (lines === 4) {
     this.score += 800;
+    this.trackTetris = true;
   } else {
     this.score += (lines * 100);
+    this.trackTetris = false;
   }
   this.trackLevel();
   console.log(this.level);
@@ -303,17 +310,13 @@ Board.prototype.resetGame = function() {
   this.loss = false;
   this.score = 0;
   this.level = 0;
+  this.loss = false;
 };
 
 Board.prototype.checkLoseCondition = function() {
-  if (this.currentPiece.location[0] < 1) {
-    for (var i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
-      var row = this.currentPiece.location[0] + this.currentPiece.occupies[i][0];
-      if (row < 0) {
-        this.loss = true;
-        // alert("You lose");
-
-      }
+  for (var i = 0; i < this.rows[3].length; i++) {
+    if (this.rows[3][i] !== "O") {
+      this.loss = true;
     }
   }
 };
@@ -449,6 +452,9 @@ $(document).ready(function() {
   var runGame = function() {
     clearInterval(interval);
     board.lowerCurrentPiece();
+    if (board.loss === true) {
+      stop = true;
+    }
     $(".linesRemoved").text(board.lines);
     $(".score").text(board.score);
     $(".level").text(board.level);

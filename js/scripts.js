@@ -498,6 +498,22 @@ $(document).ready(function() {
   var mainContext = mainCanvas.getContext("2d");
   var pieceCanvas = document.getElementById("nextPieceCanvas");
   var pieceContext = pieceCanvas.getContext("2d");
+  if ($(window).height() < 961) {
+    $(".jumbotron").addClass("hidden");
+    $("#gameCanvas").attr("width", "250");
+    $("#gameCanvas").attr("height", "500");
+  } else {
+    $(".jumbotron").removeClass("hidden");
+    $("#gameCanvas").attr("width", "300");
+    $("#gameCanvas").attr("height", "600");
+  };
+  if ($(window).width()< 961) {
+    $("#gameCanvas").attr("width", "250");
+    $("#gameCanvas").attr("height", "500");
+  } else {
+    $("#gameCanvas").attr("width", "300");
+    $("#gameCanvas").attr("height", "600");
+  };
   var runGame = function() {
     clearInterval(interval);
     board.lowerCurrentPiece();
@@ -507,7 +523,6 @@ $(document).ready(function() {
     $(".linesRemoved").text(board.lines);
     $(".score").text(board.score);
     $(".level").text(board.level);
-
     var timeSubtraction = 600;
     for (i = 1; i < board.level; i++) {
       if (i < 9) {
@@ -597,6 +612,7 @@ $(document).ready(function() {
 
   $(window).resize(function() {
     if ($(window).width()< 961) {
+      $(".jumbotron").addClass("hidden");
       $("#gameCanvas").attr("width", "250");
       $("#gameCanvas").attr("height", "500");
     } else {

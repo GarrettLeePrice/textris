@@ -32,7 +32,6 @@ Board.prototype.removeRow = function(row) {
     newRow.push("O");
   }
   this.rows.unshift(newRow);
-  this.displayBoard();
   this.lines++;
 };
 
@@ -68,7 +67,6 @@ Board.prototype.addToScore = function(lines) {
     this.trackTetris = false;
   }
   this.trackLevel();
-  console.log(this.level);
 }
 
 Board.prototype.lowerCurrentPiece = function() {
@@ -158,17 +156,6 @@ Board.prototype.populateCurrentPiece = function() {
       this.rows[row][column] = this.currentPiece.color;
     }
   }
-  this.displayBoard();
-};
-
-Board.prototype.displayBoard = function() {
-  // $("body").text("");
-  // this.rows.forEach(function(row) {
-  //   row.forEach(function(cell) {
-  //     $("body").append(cell + " ");
-  //   })
-  //   $("body").append("<br>");
-  // })
 };
 
 Board.prototype.rotatePiece = function() {
@@ -341,24 +328,6 @@ Board.prototype.getNewPiece = function() {
   return newPiece;
 };
 
-Board.prototype.confirmClear = function(location, relativeCoordinates, parentObj) {
-  /* checks to see if the given coordinates are clear. Currently only works with the edges, not with other blocks */
-  for (var i = 0; i < relativeCoordinates.length; i++) {
-    var row = location[0] + relativeCoordinates[i][0];
-    var column = location[1] + relativeCoordinates[i][1];
-    if (column > 9) {
-      return false;
-    } else if (column < 0) {
-      return false;
-    } else if (row > 23) {
-      return false;
-    } else if (! row < 0 && parentObj.rows[row][column] !== "O") {
-      return false;
-    }
-  }
-  return true;
-};
-
 Board.prototype.resetGame = function() {
   this.rows = [];
   this.currentPiece = this.getNewPiece();
@@ -399,7 +368,7 @@ Pieces.prototype.setOccupies = function() {
 
 Pieces.prototype.setToT = function() {
   this.pieceType = "t";
-  this.spacesOccupied.push(1, 2, 3, 5);
+  this.spacesOccupied.push(2, 4, 5, 6);
   this.setOccupies();
   this.color = "blue";
 };
@@ -413,28 +382,28 @@ Pieces.prototype.setToSquare = function() {
 
 Pieces.prototype.setToZ = function() {
   this.pieceType = "z";
-  this.spacesOccupied.push(2, 3, 4, 5);
+  this.spacesOccupied.push(1, 2, 5, 6);
   this.setOccupies();
   this.color = "yellow";
 };
 
 Pieces.prototype.setToReverseZ = function() {
   this.pieceType="reverseZ";
-  this.spacesOccupied.push(1, 2, 5, 6);
+  this.spacesOccupied.push(2, 3, 4, 5);
   this.setOccupies();
   this.color = "orange";
 };
 
 Pieces.prototype.setToL = function() {
   this.pieceType="l";
-  this.spacesOccupied.push(1, 2, 3, 6);
+  this.spacesOccupied.push(1, 4, 5, 6);
   this.setOccupies();
   this.color = "green";
 };
 
 Pieces.prototype.setToReverseL = function() {
   this.pieceType = "reverseL";
-  this.spacesOccupied.push(1, 2, 3, 4);
+  this.spacesOccupied.push(3, 4, 5, 6);
   this.setOccupies();
   this.color = "purple";
 };
@@ -518,7 +487,6 @@ Board.prototype.drawPieceCanvas = function(context, canvas) {
 var board = new Board();
 
 $(document).ready(function() {
-  board.displayBoard();
   var left = false;
   var right = false;
   var timePassed = 0;
@@ -626,6 +594,27 @@ $(document).ready(function() {
       right = false;
     }
   })
+  
+  $(window).resize(function() {
+    if ($(window).width()< 768) {
+      $("#gameCanvas").attr("width", "250");
+      $("#gameCanvas").attr("height", "500");
+    } else {
+      $("#gameCanvas").attr("width", "350");
+      $("#gameCanvas").attr("height", "700");
+    }
+  });
+  $(window).resize(function() {
+    if ($(window).height() < 768) {
+      $(".jumbotron").addClass("hidden");
+      $("#gameCanvas").attr("width", "250");
+      $("#gameCanvas").attr("height", "500");
+    } else {
+      $(".jumbotron").removeClass("hidden");
+      $("#gameCanvas").attr("width", "350");
+      $("#gameCanvas").attr("height", "700");
+    }
+  });
 
   var audio = new Audio('Audio/tetris.mp3');
   $("#button1").click(function(){

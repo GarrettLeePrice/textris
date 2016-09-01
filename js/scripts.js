@@ -594,25 +594,25 @@ $(document).ready(function() {
       right = false;
     }
   })
-  
+
   $(window).resize(function() {
-    if ($(window).width()< 768) {
+    if ($(window).width()< 961) {
       $("#gameCanvas").attr("width", "250");
       $("#gameCanvas").attr("height", "500");
     } else {
-      $("#gameCanvas").attr("width", "350");
-      $("#gameCanvas").attr("height", "700");
+      $("#gameCanvas").attr("width", "300");
+      $("#gameCanvas").attr("height", "600");
     }
   });
   $(window).resize(function() {
-    if ($(window).height() < 768) {
+    if ($(window).height() < 961) {
       $(".jumbotron").addClass("hidden");
       $("#gameCanvas").attr("width", "250");
       $("#gameCanvas").attr("height", "500");
     } else {
       $(".jumbotron").removeClass("hidden");
-      $("#gameCanvas").attr("width", "350");
-      $("#gameCanvas").attr("height", "700");
+      $("#gameCanvas").attr("width", "300");
+      $("#gameCanvas").attr("height", "600");
     }
   });
 

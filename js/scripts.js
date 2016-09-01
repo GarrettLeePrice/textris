@@ -344,6 +344,8 @@ Board.prototype.checkLoseCondition = function() {
   for (var i = 0; i < this.rows[3].length; i++) {
     if (this.rows[3][i] !== "O") {
       this.loss = true;
+      audio.pause();
+      audio2.play();
     }
   }
 };
@@ -434,6 +436,7 @@ Board.prototype.drawCanvas = function(context, canvas) {
     context.fillStyle = "black";
     context.stroke()
     context.closePath();
+    audio2.pause();
     return;
   }
 
@@ -485,6 +488,8 @@ Board.prototype.drawPieceCanvas = function(context, canvas) {
 };
 
 var board = new Board();
+var audio2 = new Audio('Audio/Mo_Harp.ogg');
+var audio = new Audio('Audio/tetris.mp3');
 
 $(document).ready(function() {
   var left = false;
@@ -632,15 +637,17 @@ $(document).ready(function() {
     }
   });
 
-  var audio = new Audio('Audio/tetris.mp3');
+
   $("#button1").click(function(){
     startGame();
     audio.play();
+    audio2.pause();
     audio.loop = true;
   });
   $("#button2").click(function(){
     stopGame();
     board.resetGame();
+    audio2.pause();
     audio.pause();
   });
 });

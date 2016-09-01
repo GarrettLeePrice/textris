@@ -9,6 +9,7 @@ function Board() {
   this.level = 0;
   this.trackTetris = false;
   this.paused = false;
+  this.down = false;
 };
 
 Board.prototype.trackLevel = function() {
@@ -85,6 +86,7 @@ Board.prototype.lowerCurrentPiece = function() {
     this.currentPiece = this.nextPiece;
     this.nextPiece = this.getNewPiece();
     this.populateCurrentPiece();
+    this.down = false;
   }
 };
 
@@ -500,24 +502,26 @@ $(document).ready(function() {
   var pieceContext = pieceCanvas.getContext("2d");
   var runGame = function() {
     clearInterval(interval);
-    board.lowerCurrentPiece();
+
     if (board.loss === true) {
       stop = true;
     }
     $(".linesRemoved").text(board.lines);
     $(".score").text(board.score);
     $(".level").text(board.level);
-
-    var timeSubtraction = 600;
-    for (i = 1; i < board.level; i++) {
-      if (i < 9) {
-        timeSubtraction = timeSubtraction - 60;
-      } else {
-        timeSubtraction = timeSubtraction - (timeSubtraction * .15);
+    if (board.down) {
+      counter = 40;
+    } else {
+      var timeSubtraction = 600;
+      for (i = 1; i < board.level; i++) {
+        if (i < 9) {
+          timeSubtraction = timeSubtraction - 60;
+        } else {
+          timeSubtraction = timeSubtraction - (timeSubtraction * .15);
+        }
       }
+      counter = timeSubtraction;
     }
-
-    counter = timeSubtraction;
 
     processGame();
     if (board.loss === true) {
@@ -525,9 +529,9 @@ $(document).ready(function() {
       return;
     }
     if (stop) {
-      stop = false;
       return;
     }
+    board.lowerCurrentPiece();
     interval = setInterval(runGame, counter);
   }
 
@@ -570,19 +574,22 @@ $(document).ready(function() {
       return;
     }
     if (key === 37) {
-        left = true;
-        timePassed = 0;
-        board.leftCurrentPiece();
+      left = true;
+      timePassed = 0;
+      board.leftCurrentPiece();
     } else if (key === 39) {
-        right = true;
-        timePassed = 0;
-        board.rightCurrentPiece();
+      right = true;
+      timePassed = 0;
+      board.rightCurrentPiece();
     } else if (key === 40) {
+      if (!this.down) {
         board.lowerCurrentPiece();
+      }
+      board.down = true;
     } else if (key === 38 || key === 83) {
-        board.rotatePiece();
+      board.rotatePiece();
     } else if (key === 65) {
-        board.reverseRotate();
+      board.reverseRotate();
     }
   });
 
@@ -592,9 +599,11 @@ $(document).ready(function() {
       left = false;
     } else if (key === 39) {
       right = false;
+    } else if (key === 40) {
+      board.down = false;
     }
   })
-  
+
   $(window).resize(function() {
     if ($(window).width()< 768) {
       $("#gameCanvas").attr("width", "250");

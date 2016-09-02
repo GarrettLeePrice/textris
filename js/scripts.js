@@ -233,42 +233,59 @@ Board.prototype.populateCurrentPiece = function() {
 };
 
 Board.prototype.rotatePiece = function() {
-  if (this.currentPiece.pieceType === "line") {
-    this.rotateLine();
-    return;
-  } else if (this.currentPiece.pieceType === "square") {
-    return;
-  }
   var newSpacesOccupied = [];
-  for (var i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
-    switch (this.currentPiece.spacesOccupied[i]) {
-      case 1:
-        newSpacesOccupied.push(7)
-        break;
-      case 2:
-        newSpacesOccupied.push(4);
-        break;
-      case 3:
-        newSpacesOccupied.push(1)
-        break;
-      case 4:
-        newSpacesOccupied.push(8)
-        break;
-      case 5:
-        newSpacesOccupied.push(5)
-        break;
-      case 6:
-        newSpacesOccupied.push(2)
-        break;
-      case 7:
-        newSpacesOccupied.push(9)
-        break;
-      case 8:
-        newSpacesOccupied.push(6)
-        break;
-      case 9:
-        newSpacesOccupied.push(3)
-        break;
+  if (this.currentPiece.pieceType === "square") {
+    return;
+  } else if (this.currentPiece.pieceType === "line") {
+    debugger;
+    if (this.currentPiece.spacesOccupied.includes(4)) {
+      newSpacesOccupied.push(3, 6, 9, 11);
+    } else {
+      newSpacesOccupied.push(4, 5, 6, 10)
+    }
+  } else if (this.currentPiece.pieceType === "z") {
+    if (this.currentPiece.spacesOccupied.includes(4)) {
+      newSpacesOccupied.push(2, 5, 6, 9);
+    } else {
+      newSpacesOccupied.push(2, 3, 4, 5);
+    }
+  } else if (this.currentPiece.pieceType === "reverseZ") {
+    if (this.currentPiece.spacesOccupied.includes(1)) {
+      newSpacesOccupied.push(3, 5, 6, 8);
+    } else {
+      newSpacesOccupied.push(1, 2, 5, 6);
+    }
+  } else {
+    for (var i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
+      switch (this.currentPiece.spacesOccupied[i]) {
+        case 1:
+          newSpacesOccupied.push(7)
+          break;
+        case 2:
+          newSpacesOccupied.push(4);
+          break;
+        case 3:
+          newSpacesOccupied.push(1)
+          break;
+        case 4:
+          newSpacesOccupied.push(8)
+          break;
+        case 5:
+          newSpacesOccupied.push(5)
+          break;
+        case 6:
+          newSpacesOccupied.push(2)
+          break;
+        case 7:
+          newSpacesOccupied.push(9)
+          break;
+        case 8:
+          newSpacesOccupied.push(6)
+          break;
+        case 9:
+          newSpacesOccupied.push(3)
+          break;
+      }
     }
   }
   var testSpaces = [];
@@ -286,65 +303,60 @@ Board.prototype.rotatePiece = function() {
   }
 };
 
-Board.prototype.rotateLine = function() {
-  var newSpacesOccupied = []
-  if (this.currentPiece.spacesOccupied.includes(1)) {
-    newSpacesOccupied.push(2, 5, 8, 11);
-  } else {
-    newSpacesOccupied.push(1, 2, 3, 10)
-  }
-  var testSpaces = [];
-  for (var i = 0; i < newSpacesOccupied.length; i++) {
-    var space = newSpacesOccupied[i]-1;
-    var row = this.currentPiece.location[0] + this.currentPiece.possibleSpaces[space][0];
-    var column = this.currentPiece.location[1] + this.currentPiece.possibleSpaces[space][1];
-    testSpaces.push([row, column]);
-  }
-  if (this.checkRotateSpace(testSpaces)) {
-    this.clearCurrentPieceLocation();
-    this.currentPiece.spacesOccupied = newSpacesOccupied;
-    this.currentPiece.setOccupies();
-    this.populateCurrentPiece();
-  }
-};
-
 Board.prototype.reverseRotate = function() {
-  if (this.currentPiece.pieceType === "line") {
-    this.rotateLine();
-    return;
-  } else if (this.currentPiece.pieceType === "square") {
-    return;
-  }
   var newSpacesOccupied = [];
-  for (var i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
-    switch (this.currentPiece.spacesOccupied[i]) {
-      case 1:
-        newSpacesOccupied.push(3)
-        break;
-      case 2:
-        newSpacesOccupied.push(6);
-        break;
-      case 3:
-        newSpacesOccupied.push(9)
-        break;
-      case 4:
-        newSpacesOccupied.push(2)
-        break;
-      case 5:
-        newSpacesOccupied.push(5)
-        break;
-      case 6:
-        newSpacesOccupied.push(8)
-        break;
-      case 7:
-        newSpacesOccupied.push(1)
-        break;
-      case 8:
-        newSpacesOccupied.push(4)
-        break;
-      case 9:
-        newSpacesOccupied.push(7)
-        break;
+  if (this.currentPiece.pieceType === "square") {
+    return;
+  } else if (this.currentPiece.pieceType === "line") {
+    debugger;
+    if (this.currentPiece.spacesOccupied.includes(4)) {
+      newSpacesOccupied.push(3, 6, 9, 11);
+    } else {
+      newSpacesOccupied.push(4, 5, 6, 10)
+    }
+  } else if (this.currentPiece.pieceType === "z") {
+    if (this.currentPiece.spacesOccupied.includes(4)) {
+      newSpacesOccupied.push(2, 5, 6, 9);
+    } else {
+      newSpacesOccupied.push(2, 3, 4, 5);
+    }
+  } else if (this.currentPiece.pieceType === "reverseZ") {
+    if (this.currentPiece.spacesOccupied.includes(1)) {
+      newSpacesOccupied.push(3, 5, 6, 8);
+    } else {
+      newSpacesOccupied.push(1, 2, 5, 6);
+    }
+  } else {
+    for (var i = 0; i < this.currentPiece.spacesOccupied.length; i++) {
+      switch (this.currentPiece.spacesOccupied[i]) {
+        case 1:
+          newSpacesOccupied.push(3)
+          break;
+        case 2:
+          newSpacesOccupied.push(6);
+          break;
+        case 3:
+          newSpacesOccupied.push(9)
+          break;
+        case 4:
+          newSpacesOccupied.push(2)
+          break;
+        case 5:
+          newSpacesOccupied.push(5)
+          break;
+        case 6:
+          newSpacesOccupied.push(8)
+          break;
+        case 7:
+          newSpacesOccupied.push(1)
+          break;
+        case 8:
+          newSpacesOccupied.push(4)
+          break;
+        case 9:
+          newSpacesOccupied.push(7)
+          break;
+      }
     }
   }
   var testSpaces = [];
@@ -402,18 +414,6 @@ Board.prototype.getNewPiece = function() {
   return newPiece;
 };
 
-Board.prototype.resetGame = function() {
-  this.rows = [];
-  this.currentPiece = this.getNewPiece();
-  this.nextPiece = this.getNewPiece();
-  this.buildBoard();
-  this.lines = 0;
-  this.loss = false;
-  this.score = 0;
-  this.level = 0;
-  this.loss = false;
-};
-
 Board.prototype.checkLoseCondition = function() {
   for (var i = 0; i < this.rows[3].length; i++) {
     if (this.rows[3][i] !== "O") {
@@ -429,7 +429,7 @@ function Pieces() {
   this.location = [2, 4];
   this.occupies = [];
   this.pieceType;
-  this.possibleSpaces = [[1,-1], [1,0], [1,1], [0,-1], [0,0], [0,1], [-1,-1], [-1,0], [-1,1], [1,2], [-2,0]];
+  this.possibleSpaces = [[1,-1], [1,0], [1,1], [0,-1], [0,0], [0,1], [-1,-1], [-1,0], [-1,1], [0,2], [-2,1]];
   this.spacesOccupied = [];
   this.color;
 };
@@ -451,21 +451,21 @@ Pieces.prototype.setToT = function() {
 
 Pieces.prototype.setToSquare = function() {
   this.pieceType = "square";
-  this.spacesOccupied.push(1, 2, 4, 5);
+  this.spacesOccupied.push(5, 6, 8, 9);
   this.setOccupies();
   this.color = "red";
 };
 
 Pieces.prototype.setToZ = function() {
   this.pieceType = "z";
-  this.spacesOccupied.push(1, 2, 5, 6);
+  this.spacesOccupied.push(2, 3, 4, 5);
   this.setOccupies();
   this.color = "yellow";
 };
 
 Pieces.prototype.setToReverseZ = function() {
   this.pieceType="reverseZ";
-  this.spacesOccupied.push(2, 3, 4, 5);
+  this.spacesOccupied.push(1, 2, 5, 6);
   this.setOccupies();
   this.color = "orange";
 };
@@ -486,7 +486,7 @@ Pieces.prototype.setToReverseL = function() {
 
 Pieces.prototype.setToLine = function() {
   this.pieceType = "line";
-  this.spacesOccupied.push(1,2,3,10);
+  this.spacesOccupied.push(4, 5, 6, 10);
   this.setOccupies();
   this.color = "magenta";
 };

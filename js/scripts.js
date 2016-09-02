@@ -9,11 +9,77 @@ function Board() {
   this.level = 0;
   this.trackTetris = false;
   this.paused = false;
-  this.down = false;
+  this.start = false;
+  this.frames = 48;
+  this.downPressed = false;
+  this.bonusPoints = 0;
 };
 
 Board.prototype.trackLevel = function() {
   this.level = Math.floor(this.lines / 10);
+  switch (this.level) {
+    case 0:
+      this.frames = 48;
+      break;
+    case 1:
+      this.frames = 43;
+      break;
+    case 2:
+      this.frames = 38;
+      break;
+    case 3:
+      this.frames = 33;
+      break;
+    case 4:
+      this.frames = 28;
+      break;
+    case 5:
+      this.frames = 23;
+      break;
+    case 6:
+      this.frames = 18;
+      break;
+    case 7:
+      this.frames = 13;
+      break;
+    case 8:
+      this.frames = 8;
+      break;
+    case 9:
+      this.frames = 6;
+      break;
+    case 10:
+    case 11:
+    case 12:
+      this.frames = 5;
+      break;
+    case 13:
+    case 14:
+    case 15:
+      this.frames = 4
+      break;
+    case 16:
+    case 17:
+    case 18:
+      this.frames = 3;
+      break;
+    case 19:
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 27:
+    case 28:
+      this.frames = 2;
+      break;
+    case 29:
+      this.frames = 1;
+  }
+  console.log(this.level);
+  console.log(this.frames);
 };
 
 Board.prototype.buildBoard = function() {
@@ -58,16 +124,16 @@ Board.prototype.findFullRows = function() {
 };
 
 Board.prototype.addToScore = function(lines) {
-  if (lines === 4 && this.trackTetris) {
-    this.score += 1200
-  } else if (lines === 4) {
-    this.score += 800;
-    this.trackTetris = true;
-  } else {
-    this.score += (lines * 100);
-    this.trackTetris = false;
-  }
   this.trackLevel();
+  if (lines === 1) {
+    this.score += 40 * (this.level + 1);
+  } else if (lines === 2) {
+    this.score += 100 * (this.level + 1);
+  } else if (lines === 3) {
+    this.score += 300 * (this.level + 1);
+  } else if (lines === 4) {
+    this.score += 1200 * (this.level +1);
+  }
 }
 
 Board.prototype.lowerCurrentPiece = function() {
@@ -79,6 +145,11 @@ Board.prototype.lowerCurrentPiece = function() {
     this.clearCurrentPieceLocation();
     this.currentPiece.location = newLocation;
     this.populateCurrentPiece();
+    if (this.downPressed) {
+      this.bonusPoints++;
+    } else {
+      this.bonusPoints = 0;
+    }
   } else {
     this.checkLoseCondition();
     this.populateCurrentPiece();
@@ -86,7 +157,8 @@ Board.prototype.lowerCurrentPiece = function() {
     this.currentPiece = this.nextPiece;
     this.nextPiece = this.getNewPiece();
     this.populateCurrentPiece();
-    this.down = false;
+    this.score += this.bonusPoints;
+    this.bonusPoints = 0;
   }
 };
 
@@ -494,17 +566,17 @@ var audio2 = new Audio('Audio/Mo_Harp.ogg');
 var audio = new Audio('Audio/tetris.mp3');
 
 $(document).ready(function() {
-  var left = false;
-  var right = false;
-  var timePassed = 0;
-  var then = Date.now();
-  var counter = 600;
-  var interval;
-  var stop = true;
+  var framesPassed = 0;
+  var leftPressed = false;
+  var leftHeld = 0;
+  var rightPressed = false;
+  var rightHeld = 0;
+  var downPressed = false;
   var mainCanvas = document.getElementById("gameCanvas");
   var mainContext = mainCanvas.getContext("2d");
   var pieceCanvas = document.getElementById("nextPieceCanvas");
   var pieceContext = pieceCanvas.getContext("2d");
+  setInterval(runGame, 1000/60.0988);
   if ($(window).height() < 961) {
     $(".jumbotron").addClass("hidden");
     $("#gameCanvas").attr("width", "250");
@@ -521,107 +593,88 @@ $(document).ready(function() {
     $("#gameCanvas").attr("width", "300");
     $("#gameCanvas").attr("height", "600");
   };
-  var runGame = function() {
-    clearInterval(interval);
 
-    if (board.loss === true) {
-      stop = true;
+  function runGame() {
+    if (!board.start) {
+      return;
     }
+    framesPassed++;
+    if (leftPressed) {
+      leftHeld++;
+      if (leftHeld === 16) {
+        board.leftCurrentPiece();
+        board.drawCanvas(mainContext, mainCanvas);
+        leftHeld = 10;
+      }
+    }
+    if (rightPressed) {
+      rightHeld++;
+      if (rightHeld === 16) {
+        board.rightCurrentPiece();
+        board.drawCanvas(mainContext, mainCanvas);
+        rightHeld = 10;
+      }
+    }
+    if (framesPassed === board.frames || downPressed && framesPassed >= 4) {
+      board.lowerCurrentPiece();
+      board.drawCanvas(mainContext, mainCanvas);
+      framesPassed = 0;
+    }
+    updateDisplays();
+  };
+
+  function updateDisplays() {
     $(".linesRemoved").text(board.lines);
     $(".score").text(board.score);
     $(".level").text(board.level);
-    if (board.down) {
-      counter = 40;
-    } else {
-      var timeSubtraction = 600;
-      for (i = 1; i < board.level; i++) {
-        if (i < 9) {
-          timeSubtraction = timeSubtraction - 60;
-        } else {
-          timeSubtraction = timeSubtraction - (timeSubtraction * .15);
-        }
-      }
-      counter = timeSubtraction;
-    }
-
-    processGame();
-    if (board.loss === true) {
-      stopGame();
-      return;
-    }
-    if (stop) {
-      return;
-    }
-    board.lowerCurrentPiece();
-    interval = setInterval(runGame, counter);
-  }
-
-  function startGame() {
-    if (stop === true) {
-      stop = false;
-      interval = setInterval(runGame, counter);
-    }
-  }
-  function stopGame() {
-    stop = true;
-  }
-
-  setInterval(processGame, 30);
-
-  function processGame() {
-    var now = Date.now();
-    timePassed += now - then;
-    then = now;
-    board.drawCanvas(mainContext, mainCanvas);
     board.drawPieceCanvas(pieceContext, pieceCanvas);
-    if (left && timePassed > 250) {
-      board.leftCurrentPiece();
-      timePassed = 0;
-    }
-    if (right && timePassed > 250) {
-      board.rightCurrentPiece();
-      timePassed = 0;
-    }
-  }
+  };
 
   $(document).keydown(function(event) {
     var key = event.which;
-    console.log(key);
     if (key === 13) {
       board.paused = !board.paused;
+      board.drawCanvas(mainContext, mainCanvas);
       return;
     }
-    if (stop || board.loss || board.paused) {
+    if (board.loss || board.paused) {
       return;
     }
     if (key === 37) {
-      left = true;
-      timePassed = 0;
-      board.leftCurrentPiece();
-    } else if (key === 39) {
-      right = true;
-      timePassed = 0;
-      board.rightCurrentPiece();
-    } else if (key === 40) {
-      if (!this.down) {
-        board.lowerCurrentPiece();
+      if (!leftPressed) {
+        board.leftCurrentPiece();
+        board.drawCanvas(mainContext, mainCanvas);
       }
-      board.down = true;
+      leftPressed = true;
+    } else if (key === 39) {
+      if (!rightPressed) {
+        board.rightCurrentPiece();
+        board.drawCanvas(mainContext, mainCanvas);
+      }
+      rightPressed = true;
+    } else if (key === 40) {
+      downPressed = true;
+      board.downPressed = true;
     } else if (key === 38 || key === 83) {
       board.rotatePiece();
+      board.drawCanvas(mainContext, mainCanvas);
     } else if (key === 65) {
       board.reverseRotate();
+      board.drawCanvas(mainContext, mainCanvas);
     }
   });
 
   $(document).keyup(function(event) {
     var key = event.which;
     if (key === 37) {
-      left = false;
+      leftPressed = false;
+      leftHeld = 0;
     } else if (key === 39) {
-      right = false;
+      rightPressed = false;
+      rightHeld = 0;
     } else if (key === 40) {
-      board.down = false;
+      downPressed = false;
+      board.downPressed = false;
     }
   })
 
@@ -649,14 +702,14 @@ $(document).ready(function() {
 
 
   $("#button1").click(function(){
-    startGame();
+    board.start = true;
     audio.play();
     audio2.pause();
     audio.loop = true;
   });
   $("#button2").click(function(){
-    stopGame();
-    board.resetGame();
+    board = new Board();
+    board.drawCanvas(mainContext, mainCanvas);
     audio2.pause();
     audio.pause();
   });

@@ -1,6 +1,6 @@
 # _Tetris_
 
-#### _Tetris, you know what it is.}, 8.29.16_
+#### _Tetris, you know what it is. 8.29.16_
 
 #### By _Ryan Apking, Josh Casuccio, Nhat Hoang, Garrett Price_
 
@@ -27,7 +27,7 @@ Recreation of the basic Tetris game.
 
 * remove line once 10 columns in any row are filled. This will not exceed 4 based on shape sizes
 
-* add alert to signal end of game. This will happen if enough lines are not cleared, and shapes reach top of  gameboard
+* add alert to signal end of game. This will happen if enough lines are not cleared, and shapes reach top of  game board
 
 * add start button for player interactivity
 
